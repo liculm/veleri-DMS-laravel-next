@@ -2,20 +2,17 @@
 
 namespace Database\Factories;
 
-use App\Models\Item;
+use App\Models\Document;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-/**
- * @extends Factory<Item>
- */
-class ItemFactory extends Factory
+class DocumentFactory extends Factory
 {
     /**
      * The name of the factory's corresponding model.
      *
      * @var string
      */
-    protected $model = Item::class;
+    protected $model = Document::class;
 
     /**
      * Define the model's default state.
@@ -25,8 +22,10 @@ class ItemFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => $this->faker->word,
-            'description' => $this->faker->sentence,
+            'name' => $this->faker->sentence,
+            'description' => $this->faker->paragraph,
+            'created_by_id' => 1, // You can replace this with a dynamic value if needed
+            'created_by_name' => 'Maismo',
         ];
-      }
+    }
 }

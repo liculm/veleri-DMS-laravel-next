@@ -1,21 +1,18 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Base;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Item extends Model
+class BaseModel extends Model
 {
-    use HasFactory;
-
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
     protected $fillable = [
-        'name',
-        'description',
+        'created_by_id',
+        'created_by_name',
     ];
 }
