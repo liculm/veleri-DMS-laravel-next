@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use App\Models\Base\BaseModel;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Document extends BaseModel
 {
@@ -25,4 +26,9 @@ class Document extends BaseModel
         'name',
         'description',
     ];
+
+    public function versions(): HasMany
+    {
+        return $this->hasMany(DocumentVersion::class);
+    }
 }

@@ -17,7 +17,7 @@ const ItemsPage = () => {
     const data = async ({ setErrors, setStatus, ...props }) => {
 
         axios
-            .get('api/items')
+            .get('api/documents/versions')
             .then((response) => {
                 setApiData(response.data);
             })
