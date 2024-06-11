@@ -122,6 +122,10 @@ export const useAuth = ({
     if (middleware === 'auth' && error) logout()
   }, [user, error, middleware, redirectIfAuthenticated])
 
+  const isLoggedIn = () => {
+    return user !== undefined;
+  }
+
   return {
     user,
     register,
@@ -130,5 +134,6 @@ export const useAuth = ({
     resetPassword,
     resendEmailVerification,
     logout,
+    isLoggedIn
   }
 }
