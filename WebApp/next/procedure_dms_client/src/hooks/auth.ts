@@ -18,9 +18,9 @@ export const useAuth = ({
     data: user,
     error,
     mutate,
-  } = useSWR('/api/user', () =>
+  } = useSWR('/user', () =>
     axios
-      .get('/api/user')
+      .get('/user')
       .then(res => res.data)
       .catch(error => {
         if (error.response.status !== 409) throw error

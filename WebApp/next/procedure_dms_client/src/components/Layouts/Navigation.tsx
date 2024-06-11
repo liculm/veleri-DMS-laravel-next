@@ -37,6 +37,9 @@ const Navigation = ({ user }: { user: UserType }) => {
               <NavLink href="/dashboard" active={pathname === '/dashboard'}>
                 Dashboard
               </NavLink>
+              <NavLink href="/procedure" active={pathname === '/procedure'}>
+                Procedure
+              </NavLink>
             </div>
           </div>
 
@@ -109,6 +112,11 @@ const Navigation = ({ user }: { user: UserType }) => {
               href="/dashboard"
               active={pathname === '/dashboard'}>
               Dashboard
+            </ResponsiveNavLink>
+            <ResponsiveNavLink
+              href="/procedure"
+              active={pathname === '/procedure'}>
+              Procedure
             </ResponsiveNavLink>
           </div>
 

@@ -1,6 +1,6 @@
 import React from 'react'
 
-const DashboardPage = () => {
+export default function DashboardPage() {
   return (
     <div className="py-12">
       <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
@@ -13,5 +13,3 @@ const DashboardPage = () => {
     </div>
   )
 }
-
-export default DashboardPage

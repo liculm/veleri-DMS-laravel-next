@@ -1,7 +1,7 @@
 import Axios, { AxiosInstance } from 'axios'
 
 const axios: AxiosInstance = Axios.create({
-  baseURL: 'http://localhost:8000',
+  baseURL: 'http://localhost:8000/api',
   headers: {
     'X-Requested-With': 'XMLHttpRequest',
   },
