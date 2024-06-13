@@ -1,3 +1,5 @@
+import {Procedura} from "@/types/Procedura";
+
 export interface Document {
     id: number;
     name: string;
@@ -18,7 +20,7 @@ export interface DocumentVersion {
     version_number: number;
     academic_year: string;
     approved_by_user_id: number;
-    document_data: any
+    document_data: Procedura;
     created_by_id: number;
     created_by_name: string;
     modified_by_id: number;

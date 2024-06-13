@@ -2,10 +2,13 @@
 
 import React, {useState, useEffect} from 'react';
 import axios from "@/lib/axios";
-import {DocumentWithVersions} from "@/types/Document";
+import {DocumentVersion, DocumentWithVersions} from "@/types/Document";
+import Dropdown from "@/components/Dropdown";
 
 export default function Procedura({params}: { params: { proceduraId: string } }) {
     const [document, setDocument] = useState<DocumentWithVersions | null>(null);
+    const [selectedVersion, setSelectedVersion] = useState<DocumentVersion | null>(null);
+
 
     const fetchData = () => {
         axios.get<DocumentWithVersions>(`api/documents/${params.proceduraId}/versions`)
@@ -41,12 +44,39 @@ export default function Procedura({params}: { params: { proceduraId: string } })
                             <p><strong>Opis: </strong> {document.description}</p>
                         </div>
                     </div>
-                    <div className="p-6 bg-white border-b border-gray-200">
-
-To be continued...
-                    </div>
                 </div>
+                <div className="p-6 bg-white border-b border-gray-200 h-40 shadow-sm sm:rounded-lg mt-4 h-fit">
+                    <Dropdown
+                        align="left"
+                        trigger={<button className="bg-green-200 sm:rounded-lg shadow-sm p-2">Verzija</button>}>
+                        {document.versions.map((version, index) => (
+                            <div key={index} className="p-2 border-b border-gray-200 cursor-pointer"
+                                 onClick={() => setSelectedVersion(version)}>
+                                <p><strong>Verzija: </strong> {version.version_number}</p>
+                                <p><strong>Akademska godina: </strong> {version.academic_year}</p>
+                                <p><strong>Kreirao: </strong> {version.created_by_name}</p>
+                                <p><strong>Kreirano datuma: </strong> {version.created_at.toString()}</p>
+                            </div>
+                        ))}
+                    </Dropdown>
+
+
+                {selectedVersion && (
+                    <div className="p-6 bg-white border-b border-gray-200">
+                        <h2>Opis Procesa:</h2>
+                        <ol className="list-decimal list-inside">
+                            {selectedVersion.document_data.opis_procesa?.map((item, index) => (
+                                <li key={index} className="p-1">
+                                    {item}
+                                </li>
+                            ))}
+                        </ol>
+                        {/*<pre>{JSON.stringify(selectedVersion.document_data, null, 2)}</pre>*/}
+                    </div>
+                )}
             </div>
         </div>
-    );
+</div>
+)
+    ;
 }
