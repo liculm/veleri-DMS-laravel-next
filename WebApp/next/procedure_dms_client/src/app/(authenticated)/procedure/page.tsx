@@ -9,7 +9,7 @@ export default function ProcedurePage() {
     const [documents, setDocuments] = useState<Document[]>([]);
 
     const fetchData = () => {
-        axios.get('api/documents/versions')
+        axios.get('api/documents')
             .then(({data}) => {
                 const returnedDocuments = data as Document[];
 

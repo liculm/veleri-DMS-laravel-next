@@ -4,8 +4,11 @@ export interface Document {
     description: string;
     created_by_id: number;
     created_by_name: string;
-    created_at: Date;
+    created_at: Date | string;
     updated_at: Date | string;
+}
+
+export interface DocumentWithVersions extends Document {
     versions: DocumentVersion[];
 }
 
