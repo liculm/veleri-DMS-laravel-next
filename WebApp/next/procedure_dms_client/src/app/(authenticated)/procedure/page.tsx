@@ -4,6 +4,7 @@ import React, {useState, useEffect} from 'react';
 import axios from "@/lib/axios";
 import {Document} from "@/types/Document";
 import {useRouter} from "next/navigation";
+import { formatDateHR } from '@/helpers/DateHelper'
 
 export default function ProcedurePage() {
     const [documents, setDocuments] = useState<Document[]>([]);
@@ -50,7 +51,7 @@ export default function ProcedurePage() {
                                 <tr key={index}>
                                     <td className="border px-4 py-2">{document.name}</td>
                                     <td className="border px-4 py-2">{document.created_by_name}</td>
-                                    <td className="border px-4 py-2">{document.updated_at}</td>
+                                    <td className="border px-4 py-2">{formatDateHR(new Date(document.updated_at))}</td>
                                     <td className="border px-4 py-2">
                                         <button
                                             onClick={() => router.push(`/procedure/${document.id}`)}
