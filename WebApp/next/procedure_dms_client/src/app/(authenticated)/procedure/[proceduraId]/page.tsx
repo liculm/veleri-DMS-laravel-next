@@ -4,6 +4,7 @@ import React, {useState, useEffect} from 'react';
 import axios from "@/lib/axios";
 import {DocumentVersion, DocumentWithVersions} from "@/types/Document";
 import Dropdown from "@/components/Dropdown";
+import { OBJECT } from 'swr/_internal'
 
 export default function Procedura({params}: { params: { proceduraId: string } }) {
     const [document, setDocument] = useState<DocumentWithVersions | null>(null);
@@ -61,19 +62,21 @@ export default function Procedura({params}: { params: { proceduraId: string } })
                     </Dropdown>
 
 
-                {selectedVersion && (
-                    <div className="p-6 bg-white border-b border-gray-200">
-                        <h2>Opis Procesa:</h2>
-                        <ol className="list-decimal list-inside">
-                            {selectedVersion.document_data.opis_procesa?.map((item, index) => (
+                    {selectedVersion && Object.entries(selectedVersion.document_data).map(([key, value], index) => (
+
+
+                      <div key={index} className="p-6 bg-white border-b border-gray-200">
+                          <h2><strong>{key.replace(/_/g, ' ').charAt(0).toUpperCase() + key.replace(/_/g, ' ').slice(1)}:</strong>
+                          </h2>
+                          <ol className="list-decimal list-inside">
+                              {value.map((item: string, index: string) => (
                                 <li key={index} className="p-1">
                                     {item}
                                 </li>
-                            ))}
-                        </ol>
-                        {/*<pre>{JSON.stringify(selectedVersion.document_data, null, 2)}</pre>*/}
-                    </div>
-                )}
+                              ))}
+                          </ol>
+                      </div>
+                    ))}
             </div>
         </div>
 </div>
