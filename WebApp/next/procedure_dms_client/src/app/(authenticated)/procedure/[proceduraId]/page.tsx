@@ -29,6 +29,10 @@ export default function Procedura({ params }: { params: { proceduraId: string } 
   useEffect(fetchData, [params.proceduraId])
 
   useEffect(() => {
+    if (selectedVersion && compareVersion) {
+      return
+    }
+
     if (selectedVersionEditorRef.current && selectedVersion) {
       const container = selectedVersionEditorRef.current;
       const options: JSONEditorOptions = {
@@ -50,7 +54,7 @@ export default function Procedura({ params }: { params: { proceduraId: string } 
       editor.setMode('view'); // set tree mode
       editor.set(compareVersion.document_data); // set the compare version data
     }
-  }, [compareVersion]);
+  }, [compareVersion, selectedVersion]);
 
   if (!document) {
     return <div className="flex justify-center items-center h-screen">
@@ -81,7 +85,7 @@ export default function Procedura({ params }: { params: { proceduraId: string } 
             <Dropdown
               trigger={<button className="bg-green-200 sm:rounded-lg shadow-sm p-2">Verzija</button>}>
               {document.versions.map((version, index) => (
-                <div key={index} className="p-2 border-b border-gray-200 cursor-pointer"
+                <div key={index} className="p-2 border-b border-gray-200 cursor-pointer w-max"
                      onClick={() => setSelectedVersion(version)}>
                   <p><strong>Verzija: </strong> {version.version_number}</p>
                   <p><strong>Akademska godina: </strong> {version.academic_year}</p>
@@ -90,7 +94,11 @@ export default function Procedura({ params }: { params: { proceduraId: string } 
                 </div>
               ))}
             </Dropdown>
-
+            {selectedVersion && (
+              <p>
+                Trenutno odabrana verzija: <strong>{selectedVersion.version_number}</strong>
+              </p>
+            )}
             <Dropdown
               trigger={
                 <div className="flex items-center">
@@ -110,7 +118,7 @@ export default function Procedura({ params }: { params: { proceduraId: string } 
                 </div>
               }>
               {document.versions.filter(version => version !== selectedVersion).map((version, index) => (
-                <div key={index} className="p-2 border-b border-gray-200 cursor-pointer"
+                <div key={index} className="p-2 border-b border-gray-200 cursor-pointer w-max"
                      onClick={() => setCompareVersion(version)}>
                   <p><strong>Verzija: </strong> {version.version_number}</p>
                   <p><strong>Akademska godina: </strong> {version.academic_year}</p>
@@ -122,14 +130,12 @@ export default function Procedura({ params }: { params: { proceduraId: string } 
           </div>
           {!(selectedVersion && compareVersion) && <VersionDetails selectedVersion={selectedVersion} />}
 
+          {(selectedVersion && compareVersion) && (
           <div className="flex justify-between">
-            {selectedVersion && (
               <div ref={selectedVersionEditorRef} className="w-1/2" />
-            )}
-            {compareVersion && (
               <div ref={compareVersionEditorRef} className="w-1/2" />
-            )}
           </div>
+          )}
         </div>
       </div>
     </div>
