@@ -29,10 +29,10 @@ export default function Procedura({ params }: { params: { proceduraId: string } 
   useEffect(fetchData, [params.proceduraId])
 
   useEffect(() => {
-    if (selectedVersion && compareVersion) {
-      return
-    }
+    if (selectedVersion && compareVersion) return
+  }, [selectedVersion]);
 
+  useEffect(() => {
     if (selectedVersionEditorRef.current && selectedVersion) {
       const container = selectedVersionEditorRef.current;
       const options: JSONEditorOptions = {
@@ -42,9 +42,7 @@ export default function Procedura({ params }: { params: { proceduraId: string } 
       editor.setMode('view'); // set tree mode
       editor.set(selectedVersion.document_data); // set the selected version data
     }
-  }, [selectedVersion]);
 
-  useEffect(() => {
     if (compareVersionEditorRef.current && compareVersion) {
       const container = compareVersionEditorRef.current;
       const options: JSONEditorOptions = {
@@ -54,7 +52,7 @@ export default function Procedura({ params }: { params: { proceduraId: string } 
       editor.setMode('view'); // set tree mode
       editor.set(compareVersion.document_data); // set the compare version data
     }
-  }, [compareVersion, selectedVersion]);
+  }, [compareVersion]);
 
   if (!document) {
     return <div className="flex justify-center items-center h-screen">
