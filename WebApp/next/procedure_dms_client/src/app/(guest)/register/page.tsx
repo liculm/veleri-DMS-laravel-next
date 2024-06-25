@@ -18,7 +18,7 @@ interface Values {
 const RegisterPage = () => {
   const { register } = useAuth({
     middleware: 'guest',
-    redirectIfAuthenticated: '/dashboard',
+    redirectIfAuthenticated: '/procedure',
   })
 
   const submitForm = async (

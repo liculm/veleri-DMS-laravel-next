@@ -27,16 +27,13 @@ const Navigation = ({ user }: { user: UserType }) => {
           <div className="flex">
             {/* Logo */}
             <div className="flex-shrink-0 flex items-center">
-              <Link href="/dashboard">
+              <Link href="/procedure">
                 <ApplicationLogo className="block h-10 w-auto fill-current text-gray-600" />
               </Link>
             </div>
 
             {/* Navigation Links */}
             <div className="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-              <NavLink href="/dashboard" active={pathname === '/dashboard'}>
-                Dashboard
-              </NavLink>
               <NavLink href="/procedure" active={pathname === '/procedure'}>
                 Procedure
               </NavLink>
@@ -108,11 +105,6 @@ const Navigation = ({ user }: { user: UserType }) => {
       {open && (
         <div className="block sm:hidden">
           <div className="pt-2 pb-3 space-y-1">
-            <ResponsiveNavLink
-              href="/dashboard"
-              active={pathname === '/dashboard'}>
-              Dashboard
-            </ResponsiveNavLink>
             <ResponsiveNavLink
               href="/procedure"
               active={pathname === '/procedure'}>

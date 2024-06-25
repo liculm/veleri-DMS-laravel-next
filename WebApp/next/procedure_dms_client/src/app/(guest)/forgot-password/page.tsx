@@ -19,7 +19,7 @@ const ForgotPasswordPage = () => {
 
   const { forgotPassword } = useAuth({
     middleware: 'guest',
-    redirectIfAuthenticated: '/dashboard',
+    redirectIfAuthenticated: '/procedure',
   })
 
   const ForgotPasswordSchema = Yup.object().shape({
