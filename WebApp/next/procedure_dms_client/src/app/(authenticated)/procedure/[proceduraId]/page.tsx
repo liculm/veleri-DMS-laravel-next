@@ -5,17 +5,36 @@ import axios from '@/lib/axios'
 import { DocumentVersion, DocumentWithVersions } from '@/types/Document'
 import Dropdown from '@/components/Dropdown'
 import VersionDetails from '@/components/Documents/VersionDetails'
-import JSONEditor, { JSONEditorOptions } from 'jsoneditor'
+import JSONEditor, { JSONEditorOptions, OnClassNameParams } from 'jsoneditor'
+import lodash from 'lodash'
 import { formatDateHR, formatDateTimeHR } from '@/helpers/DateHelper'
-
+import '../../../../../node_modules/jsoneditor/dist/jsoneditor.css'
 
 export default function Procedura({ params }: { params: { proceduraId: string } }) {
   const [document, setDocument] = useState<DocumentWithVersions | null>(null)
   const [selectedVersion, setSelectedVersion] = useState<DocumentVersion | null>(null)
   const [compareVersion, setCompareVersion] = useState<DocumentVersion | null>(null)
 
-  const selectedVersionEditorRef = useRef(null);
-  const compareVersionEditorRef = useRef(null);
+  const selectedVersionEditorRef = useRef(null)
+  const compareVersionEditorRef = useRef(null)
+
+  const editorOptions: JSONEditorOptions = {
+    name: 'Dokument',
+    mode: 'view',
+    mainMenuBar: true,
+    navigationBar: false,
+  }
+
+  function checkDifferences(path: readonly string[]): string {
+    const selectedVersionDocumentData = lodash.get(selectedVersion?.document_data, path)
+    const compareVersionDocumentData = lodash.get(compareVersion?.document_data, path)
+
+    const isEqual = lodash.isEqual(selectedVersionDocumentData, compareVersionDocumentData)
+
+    if (isEqual) return ''
+
+    return 'code-line-updated'
+  }
 
   const fetchData = () => {
     axios.get<DocumentWithVersions>(`api/documents/${params.proceduraId}/versions`)
@@ -30,29 +49,32 @@ export default function Procedura({ params }: { params: { proceduraId: string } 
 
   useEffect(() => {
     if (selectedVersion && compareVersion) return
-  }, [selectedVersion]);
+  }, [selectedVersion])
 
   useEffect(() => {
     if (selectedVersionEditorRef.current && selectedVersion) {
-      const container = selectedVersionEditorRef.current;
-      const options: JSONEditorOptions = {
-        modes: ['code', 'form', 'text', 'tree', 'view'], // allowed modes
-      };
-      const editor = new JSONEditor(container, options);
-      editor.setMode('view'); // set tree mode
-      editor.set(selectedVersion.document_data); // set the selected version data
+      new JSONEditor(
+        selectedVersionEditorRef.current,
+        {
+          ...editorOptions,
+          onClassName: (classNameParams: OnClassNameParams) =>
+            checkDifferences(classNameParams.path),
+        },
+        selectedVersion.document_data)
     }
 
     if (compareVersionEditorRef.current && compareVersion) {
-      const container = compareVersionEditorRef.current;
-      const options: JSONEditorOptions = {
-        modes: ['code', 'form', 'text', 'tree', 'view'], // allowed modes
-      };
-      const editor = new JSONEditor(container, options);
-      editor.setMode('view'); // set tree mode
-      editor.set(compareVersion.document_data); // set the compare version data
+      new JSONEditor(
+        compareVersionEditorRef.current,
+        {
+          ...editorOptions,
+          onClassName: (classNameParams: OnClassNameParams) =>
+            checkDifferences(classNameParams.path),
+        },
+        compareVersion.document_data,
+      )
     }
-  }, [compareVersion]);
+  }, [compareVersion])
 
   if (!document) {
     return <div className="flex justify-center items-center h-screen">
@@ -81,7 +103,10 @@ export default function Procedura({ params }: { params: { proceduraId: string } 
         <div className="p-6 bg-white border-b border-gray-200 shadow-sm sm:rounded-lg mt-4 h-fit">
           <div className="flex justify-between">
             <Dropdown
-              trigger={<button className="bg-green-200 sm:rounded-lg shadow-sm p-2">Verzija</button>}>
+              trigger={<button
+                className={`bg-green-200 sm:rounded-lg shadow-sm p-2 ${selectedVersion && compareVersion ? 'cursor-not-allowed' : ''}`}
+                disabled={!!(selectedVersion && compareVersion)}
+              >Verzija</button>}>
               {document.versions.map((version, index) => (
                 <div key={index} className="p-2 border-b border-gray-200 cursor-pointer w-max"
                      onClick={() => setSelectedVersion(version)}>
@@ -129,10 +154,10 @@ export default function Procedura({ params }: { params: { proceduraId: string } 
           {!(selectedVersion && compareVersion) && <VersionDetails selectedVersion={selectedVersion} />}
 
           {(selectedVersion && compareVersion) && (
-          <div className="flex justify-between">
-              <div ref={selectedVersionEditorRef} className="w-1/2" />
-              <div ref={compareVersionEditorRef} className="w-1/2" />
-          </div>
+            <div className="flex justify-between mt-6">
+              <div ref={selectedVersionEditorRef} className="jsoneditor w-1/2" />
+              <div ref={compareVersionEditorRef} className="jsoneditor w-1/2" />
+            </div>
           )}
         </div>
       </div>
