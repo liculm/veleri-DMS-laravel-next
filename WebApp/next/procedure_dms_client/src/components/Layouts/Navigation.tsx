@@ -35,7 +35,11 @@ const Navigation = ({ user }: { user: UserType }) => {
             {/* Navigation Links */}
             <div className="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
               <NavLink href="/procedure" active={pathname === '/procedure'}>
-                Procedure
+                Pregled procedura
+              </NavLink>
+
+              <NavLink href="/upravljanje-procedurama" active={pathname === '/upravljanje-procedurama'}>
+                Upravljanje procedurama
               </NavLink>
             </div>
           </div>
@@ -108,7 +112,13 @@ const Navigation = ({ user }: { user: UserType }) => {
             <ResponsiveNavLink
               href="/procedure"
               active={pathname === '/procedure'}>
-              Procedure
+              Pregled procedura
+            </ResponsiveNavLink>
+
+            <ResponsiveNavLink
+              href="/upravljanje-procedurama"
+              active={pathname === '/upravljanje-procedurama'}>
+              Upravljanje procedurama
             </ResponsiveNavLink>
           </div>
 

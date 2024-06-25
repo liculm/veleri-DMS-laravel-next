@@ -35,7 +35,7 @@ export default function ProcedurePage() {
                             onClick={fetchData}
                             className="btn btn-primary float-right mb-4 bg-blue-300 p-2 rounded"
                         >
-                            Refresh
+                            Osviježi
                         </button>
                         <table className="table-auto w-full">
                             <thead>
@@ -55,7 +55,7 @@ export default function ProcedurePage() {
                                     <td className="border px-4 py-2">
                                         <button
                                             onClick={() => router.push(`/procedure/${document.id}`)}
-                                            className="btn btn-primary float-right mb-4 bg-blue-300 p-2 rounded"
+                                            className="btn btn-primary float-right mb-4 bg-green-200 p-2 rounded"
                                         >
                                             Izaberi
                                         </button>
