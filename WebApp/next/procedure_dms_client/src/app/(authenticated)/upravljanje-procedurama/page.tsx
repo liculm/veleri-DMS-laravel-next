@@ -1,9 +1,8 @@
-'use client';
+'use client'
 import React, { useState } from 'react'
 import { Formik, Field, Form, ErrorMessage } from 'formik'
 import * as Yup from 'yup'
 import axios from '@/lib/axios'
-import { Document } from '@/types/Document'
 
 interface AddDocumentPayload {
   name: string
@@ -11,8 +10,8 @@ interface AddDocumentPayload {
 }
 
 export default function UpravljanjeProcedurama() {
-  const [showForm, setShowForm] = useState(false);
-  const [submitting, setSubmitting] = useState(false);
+  const [showForm, setShowForm] = useState(false)
+  const [submitting, setSubmitting] = useState(false)
 
   const toggleForm = () => setShowForm(!showForm)
 
@@ -21,13 +20,13 @@ export default function UpravljanjeProcedurama() {
     await axios.post('api/documents', values).then(
       (response) => {
         console.log(response)
-      }
+      },
     ).catch((error) => {
       console.log(error)
     })
 
     setSubmitting(false)
-    toggleForm();
+    toggleForm()
   }
 
   const DocumentSchema = Yup.object().shape({
@@ -46,31 +45,41 @@ export default function UpravljanjeProcedurama() {
       <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
         <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg">
           <div className="p-6 bg-white border-b border-gray-200">
-            <button onClick={toggleForm}
-                    className={`sm:rounded-lg shadow-sm p-2 ${showForm ? 'bg-red-200' : 'bg-green-200'}`}>
-              {showForm ? 'Zatvori' : 'Dodaj novu proceduru'}
+            <button className={`sm:rounded-lg shadow-sm p-2 bg-green-200`}
+                    onClick={() => document.getElementById('document_form').showModal()}>
+              Dodaj novu proceduru
             </button>
-            {showForm && (
+
+            <dialog id="document_form" className="modal modal-bottom sm:modal-middle w-1/2">
+              {/*<div className="modal-box">*/}
+              {/*  <form method="dialog">*/}
+              {/*    <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>*/}
+              {/*  </form>*/}
+              {/*</div>*/}
               <Formik
                 initialValues={{ name: '', description: '' }}
                 validationSchema={DocumentSchema}
                 onSubmit={handleSubmit}
               >
-                <Form className="space-y-4 mt-10">
+                <Form className="space-y-4 mt-10 p-5">
                   <div>
                     <label className="block text-sm font-medium text-gray-700">Naziv procedure:</label>
-                    <Field type="text" name="name" className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" />
+                    <Field type="text" name="name"
+                           className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" />
                     <ErrorMessage name="name" component="div" />
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-gray-700">Opis:</label>
-                    <Field as="textarea" name="description" className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" />
+                    <Field as="textarea" name="description"
+                           className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" />
                     <ErrorMessage name="description" component="div" />
                   </div>
-                  <button type="submit" className="py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">Spremi</button>
+                  <button type="submit"
+                          className="py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">Spremi
+                  </button>
                 </Form>
               </Formik>
-            )}
+            </dialog>
           </div>
         </div>
       </div>

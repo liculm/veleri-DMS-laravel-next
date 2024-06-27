@@ -22,9 +22,11 @@ class Document extends BaseModel
      *
      * @var array
      */
-    protected $fillable = [
+     protected $fillable = [
         'name',
         'description',
+        'created_by_id',
+        'created_by_name',
     ];
 
     public function versions(): HasMany

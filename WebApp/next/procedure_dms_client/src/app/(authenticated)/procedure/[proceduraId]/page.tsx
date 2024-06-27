@@ -78,7 +78,7 @@ export default function Procedura({ params }: { params: { proceduraId: string } 
 
   if (!document) {
     return <div className="flex justify-center items-center h-screen">
-      Učitavanje...
+      <span className="loading loading-spinner text-neutral"></span>
     </div>
   }
 
