@@ -2,6 +2,8 @@
 import React, { useState } from 'react'
 import { Formik, Field, Form, ErrorMessage } from 'formik'
 import * as Yup from 'yup'
+import axios from '@/lib/axios'
+import { Document } from '@/types/Document'
 
 interface AddDocumentPayload {
   name: string
@@ -10,20 +12,34 @@ interface AddDocumentPayload {
 
 export default function UpravljanjeProcedurama() {
   const [showForm, setShowForm] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
 
-  const toggleForm = () => {
-    setShowForm(!showForm);
-  }
+  const toggleForm = () => setShowForm(!showForm)
 
-  const handleSubmit = async (values: AddDocumentPayload, { setSubmitting }) => {
-    console.log(JSON.stringify(values))
-    setSubmitting(false);
+  const handleSubmit = async (values: AddDocumentPayload) => {
+    setSubmitting(true)
+    await axios.post('api/documents', values).then(
+      (response) => {
+        console.log(response)
+      }
+    ).catch((error) => {
+      console.log(error)
+    })
+
+    setSubmitting(false)
+    toggleForm();
   }
 
   const DocumentSchema = Yup.object().shape({
-    name: Yup.string().required('The name field is required.'),
-    description: Yup.string().required('The description field is required.'),
+    name: Yup.string().required('Naziv procedure je obavezno polje.'),
+    description: Yup.string().required('Opis procedure je obavezno polje.'),
   })
+
+  if (submitting) {
+    return <div className="flex justify-center items-center h-screen">
+      Učitavanje...
+    </div>
+  }
 
   return (
     <div className="py-12">
@@ -40,18 +56,18 @@ export default function UpravljanjeProcedurama() {
                 validationSchema={DocumentSchema}
                 onSubmit={handleSubmit}
               >
-                <Form className="space-y-4">
+                <Form className="space-y-4 mt-10">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700">Name:</label>
+                    <label className="block text-sm font-medium text-gray-700">Naziv procedure:</label>
                     <Field type="text" name="name" className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" />
                     <ErrorMessage name="name" component="div" />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700">Description:</label>
+                    <label className="block text-sm font-medium text-gray-700">Opis:</label>
                     <Field as="textarea" name="description" className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" />
                     <ErrorMessage name="description" component="div" />
                   </div>
-                  <button type="submit" className="py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">Submit</button>
+                  <button type="submit" className="py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">Spremi</button>
                 </Form>
               </Formik>
             )}

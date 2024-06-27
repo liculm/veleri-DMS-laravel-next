@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Document;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 
 class DocumentController extends Controller
 {
@@ -29,5 +30,22 @@ class DocumentController extends Controller
         } else {
             return response()->json(['error' => 'Document not found'], 404);
         }
+    }
+
+    public function store(Request $request): JsonResponse
+    {
+        $user = $request->user();
+
+        $validatedData = $request->validate([
+            'name' => 'required|max:255',
+            'description' => 'required|max:1000',
+        ]);
+
+        $validatedData['created_by_id'] = $user->id;
+        $validatedData['created_by_name'] = $user->name;
+
+        $document = Document::create($validatedData);
+
+        return response()->json($document, 201);
     }
 }

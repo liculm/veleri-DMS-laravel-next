@@ -13,3 +13,5 @@ Route::middleware(['auth:sanctum'])->get('/documents/versions', [DocumentControl
 Route::middleware(['auth:sanctum'])->get('/documents', [DocumentController::class, 'allDocuments']);
 
 Route::middleware(['auth:sanctum'])->get('/documents/{id}/versions', [DocumentController::class, 'requestedDocumentWithVersions']);
+
+Route::middleware(['auth:sanctum'])->post('/documents', [DocumentController::class, 'store']);
