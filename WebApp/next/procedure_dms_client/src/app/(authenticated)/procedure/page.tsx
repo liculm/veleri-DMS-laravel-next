@@ -7,6 +7,8 @@ import { useRouter } from 'next/navigation'
 import { formatDateHR } from '@/helpers/DateHelper'
 import { ErrorMessage, Field, Form, Formik } from 'formik'
 import * as Yup from 'yup'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faEye, faPen, faRepeat } from '@fortawesome/free-solid-svg-icons'
 
 interface AddDocumentPayload {
   name: string
@@ -74,7 +76,7 @@ export default function ProcedurePage() {
               onClick={fetchData}
               className="float-right mb-4 bg-blue-300 p-2 rounded"
             >
-              Osviježi
+              <FontAwesomeIcon icon={faRepeat} />
             </button>
             <table className="table-auto w-full">
               <thead>
@@ -88,15 +90,21 @@ export default function ProcedurePage() {
               <tbody>
               {documents.map((document: Document, index) => (
                 <tr key={index}>
-                  <td className="border px-4 py-2">{document.name}</td>
-                  <td className="border px-4 py-2">{document.created_by_name}</td>
-                  <td className="border px-4 py-2">{formatDateHR(new Date(document.updated_at))}</td>
-                  <td className="border px-4 py-2">
+                  <td className="border">{document.name}</td>
+                  <td className="border">{document.created_by_name}</td>
+                  <td className="border">{formatDateHR(new Date(document.updated_at))}</td>
+                  <td className="border">
                     <button
                       onClick={() => router.push(`/procedure/${document.id}`)}
-                      className="float-right mb-4 bg-green-200 p-2 rounded"
+                      className="float-right mb-4 bg-blue-200 p-2 rounded"
                     >
-                      Pregledaj
+                      <FontAwesomeIcon icon={faEye} />
+                    </button>
+                    <button
+                      onClick={() => router.push(`/procedure/${document.id}/izmjena`)}
+                      className="float-right mb-4 bg-orange-200 p-2 rounded"
+                    >
+                      <FontAwesomeIcon icon={faPen} />
                     </button>
                   </td>
                 </tr>

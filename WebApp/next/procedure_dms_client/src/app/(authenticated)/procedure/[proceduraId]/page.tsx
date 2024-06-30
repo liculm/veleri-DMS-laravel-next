@@ -101,56 +101,60 @@ export default function Procedura({ params }: { params: { proceduraId: string } 
           </div>
         </div>
         <div className="p-6 bg-white border-b border-gray-200 shadow-sm sm:rounded-lg mt-4 h-fit">
-          <div className="flex justify-between">
-            <Dropdown
-              trigger={<button
-                className={`bg-green-200 sm:rounded-lg shadow-sm p-2 ${selectedVersion && compareVersion ? 'cursor-not-allowed' : ''}`}
-                disabled={!!(selectedVersion && compareVersion)}
-              >Verzija</button>}>
-              {document.versions.map((version, index) => (
-                <div key={index} className="p-2 border-b border-gray-200 cursor-pointer w-max"
-                     onClick={() => setSelectedVersion(version)}>
-                  <p><strong>Verzija: </strong> {version.version_number}</p>
-                  <p><strong>Akademska godina: </strong> {version.academic_year}</p>
-                  <p><strong>Kreirao: </strong> {version.created_by_name}</p>
-                  <p><strong>Kreirano datuma: </strong> {formatDateTimeHR(new Date(version.created_at))}</p>
-                </div>
-              ))}
-            </Dropdown>
-            {selectedVersion && (
-              <p>
-                Trenutno odabrana verzija: <strong>{selectedVersion.version_number}</strong>
-              </p>
-            )}
-            <Dropdown
-              trigger={
-                <div className="flex items-center">
-                  {selectedVersion && (
-                    <button className="bg-blue-200 sm:rounded-lg shadow-sm p-2">Usporedi sa</button>
-                  )}
-                  {compareVersion && (
-                    <button
-                      className="ml-2 bg-red-200 sm:rounded-lg shadow-sm p-2"
-                      onClick={() => {
-                        setCompareVersion(null)
-                      }}
-                    >
-                      Poništi usporedbu
-                    </button>
-                  )}
-                </div>
-              }>
-              {document.versions.filter(version => version !== selectedVersion).map((version, index) => (
-                <div key={index} className="p-2 border-b border-gray-200 cursor-pointer w-max"
-                     onClick={() => setCompareVersion(version)}>
-                  <p><strong>Verzija: </strong> {version.version_number}</p>
-                  <p><strong>Akademska godina: </strong> {version.academic_year}</p>
-                  <p><strong>Kreirao: </strong> {version.created_by_name}</p>
-                  <p><strong>Kreirano datuma: </strong> {formatDateTimeHR(new Date(version.created_at))}</p>
-                </div>
-              ))}
-            </Dropdown>
-          </div>
+          {!document.versions.length ? (
+            <p>Nažalost, nema dostupnih verzija.</p>
+          ) : (
+            <div className="flex justify-between">
+              <Dropdown
+                trigger={<button
+                  className={`bg-green-200 sm:rounded-lg shadow-sm p-2 ${selectedVersion && compareVersion ? 'cursor-not-allowed' : ''}`}
+                  disabled={!!(selectedVersion && compareVersion)}
+                >Verzija</button>}>
+                {document.versions.map((version, index) => (
+                  <div key={index} className="p-2 border-b border-gray-200 cursor-pointer w-max"
+                       onClick={() => setSelectedVersion(version)}>
+                    <p><strong>Verzija: </strong> {version.version_number}</p>
+                    <p><strong>Akademska godina: </strong> {version.academic_year}</p>
+                    <p><strong>Kreirao: </strong> {version.created_by_name}</p>
+                    <p><strong>Kreirano datuma: </strong> {formatDateTimeHR(new Date(version.created_at))}</p>
+                  </div>
+                ))}
+              </Dropdown>
+              {selectedVersion && (
+                <p>
+                  Trenutno odabrana verzija: <strong>{selectedVersion.version_number}</strong>
+                </p>
+              )}
+              <Dropdown
+                trigger={
+                  <div className="flex items-center">
+                    {selectedVersion && (
+                      <button className="bg-blue-200 sm:rounded-lg shadow-sm p-2">Usporedi sa</button>
+                    )}
+                    {compareVersion && (
+                      <button
+                        className="ml-2 bg-red-200 sm:rounded-lg shadow-sm p-2"
+                        onClick={() => {
+                          setCompareVersion(null)
+                        }}
+                      >
+                        Poništi usporedbu
+                      </button>
+                    )}
+                  </div>
+                }>
+                {document.versions.filter(version => version !== selectedVersion).map((version, index) => (
+                  <div key={index} className="p-2 border-b border-gray-200 cursor-pointer w-max"
+                       onClick={() => setCompareVersion(version)}>
+                    <p><strong>Verzija: </strong> {version.version_number}</p>
+                    <p><strong>Akademska godina: </strong> {version.academic_year}</p>
+                    <p><strong>Kreirao: </strong> {version.created_by_name}</p>
+                    <p><strong>Kreirano datuma: </strong> {formatDateTimeHR(new Date(version.created_at))}</p>
+                  </div>
+                ))}
+              </Dropdown>
+            </div>
+          )}
           {!(selectedVersion && compareVersion) && <VersionDetails selectedVersion={selectedVersion} />}
 
           {(selectedVersion && compareVersion) && (
