@@ -38,9 +38,7 @@ const Navigation = ({ user }: { user: UserType }) => {
                 Pregled procedura
               </NavLink>
 
-              <NavLink href="/upravljanje-procedurama" active={pathname === '/upravljanje-procedurama'}>
-                Upravljanje procedurama
-              </NavLink>
+
             </div>
           </div>
 
@@ -113,12 +111,6 @@ const Navigation = ({ user }: { user: UserType }) => {
               href="/procedure"
               active={pathname === '/procedure'}>
               Pregled procedura
-            </ResponsiveNavLink>
-
-            <ResponsiveNavLink
-              href="/upravljanje-procedurama"
-              active={pathname === '/upravljanje-procedurama'}>
-              Upravljanje procedurama
             </ResponsiveNavLink>
           </div>
 
