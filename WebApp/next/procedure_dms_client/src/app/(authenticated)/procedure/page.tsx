@@ -57,7 +57,7 @@ export default function ProcedurePage() {
                       onClick={() => router.push(`/procedure/${document.id}`)}
                       className="btn btn-primary float-right mb-4 bg-green-200 p-2 rounded"
                     >
-                      Izaberi
+                      Pregledaj
                     </button>
                   </td>
                 </tr>
