@@ -15,3 +15,5 @@ Route::middleware(['auth:sanctum'])->get('/documents', [DocumentController::clas
 Route::middleware(['auth:sanctum'])->get('/documents/{id}/versions', [DocumentController::class, 'requestedDocumentWithVersions']);
 
 Route::middleware(['auth:sanctum'])->post('/documents', [DocumentController::class, 'store']);
+
+Route::middleware(['auth:sanctum'])->put('/documents', [DocumentController::class, 'updateDocument']);

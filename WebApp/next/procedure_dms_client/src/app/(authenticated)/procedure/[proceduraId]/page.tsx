@@ -9,6 +9,7 @@ import JSONEditor, { JSONEditorOptions, OnClassNameParams } from 'jsoneditor'
 import lodash from 'lodash'
 import { formatDateHR, formatDateTimeHR } from '@/helpers/DateHelper'
 import '../../../../../node_modules/jsoneditor/dist/jsoneditor.css'
+import DocumentDetails from '@/components/Documents/DocumentDetails'
 
 export default function Procedura({ params }: { params: { proceduraId: string } }) {
   const [document, setDocument] = useState<DocumentWithVersions | null>(null)
@@ -86,19 +87,7 @@ export default function Procedura({ params }: { params: { proceduraId: string } 
     <div className="py-12">
       <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
         <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-          <div className="p-6 bg-white border-b border-gray-200 flex flex-wrap">
-            <div className="w-1/2 p-2">
-              <p><strong>Ime procedure: </strong> {document.name}</p>
-              <p><strong>Posljednje ažurirano: </strong> {formatDateTimeHR(new Date(document.updated_at))}</p>
-            </div>
-            <div className="w-1/2 p-2">
-              <p><strong>Inicijalno kreirano od strane: </strong> {document.created_by_name}</p>
-              <p><strong>Inicijalno kreirano datuma: </strong> {formatDateHR(new Date(document.created_at))}</p>
-            </div>
-            <div className="w-1/1 p-2">
-              <p><strong>Opis: </strong> {document.description}</p>
-            </div>
-          </div>
+          <DocumentDetails documentWithVersions={document} />
         </div>
         <div className="p-6 bg-white border-b border-gray-200 shadow-sm sm:rounded-lg mt-4 h-fit">
           {!document.versions.length ? (

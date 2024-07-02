@@ -93,7 +93,7 @@ const LoginPage = () => {
             <label
               htmlFor="password"
               className="undefined block font-medium text-sm text-gray-700">
-              Password
+              Zaporka
             </label>
 
             <Field
@@ -119,7 +119,7 @@ const LoginPage = () => {
               />
 
               <span className="ml-2 text-[#252729] text-sm leading-[150%] tracking-[-0.4px] font-medium">
-                Remember me
+                Sjeti me se
               </span>
             </label>
           </div>
@@ -128,13 +128,13 @@ const LoginPage = () => {
             <Link
               href="/forgot-password"
               className="underline text-sm text-gray-600 hover:text-gray-900">
-              Forgot your password?
+              Zaboravljena zaporka?
             </Link>
 
             <button
               type="submit"
               className="ml-3 inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 active:bg-gray-900 focus:outline-none focus:border-gray-900 focus:ring ring-gray-300 disabled:opacity-25 transition ease-in-out duration-150">
-              Login
+              Prijava
             </button>
           </div>
         </Form>

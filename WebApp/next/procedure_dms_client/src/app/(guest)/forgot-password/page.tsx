@@ -24,8 +24,8 @@ const ForgotPasswordPage = () => {
 
   const ForgotPasswordSchema = Yup.object().shape({
     email: Yup.string()
-      .email('Invalid email')
-      .required('The email field is required.'),
+      .email('Nevažeći email.')
+      .required('Email je obavezan.'),
   })
 
   const submitForm = async (

@@ -69,7 +69,7 @@ export default function ProcedurePage() {
         <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg">
           <div className="p-6 bg-white border-b border-gray-200">
             <button className="float-right ml-4 rounded shadow-sm p-2 bg-green-200"
-                    onClick={() => document.getElementById('document_form')?.showModal()}>
+                    onClick={() => (document.getElementById('document_form') as HTMLDialogElement)?.showModal()}>
               Dodaj novu proceduru
             </button>
             <button
@@ -90,31 +90,35 @@ export default function ProcedurePage() {
               <tbody>
               {documents.map((document: Document, index) => (
                 <tr key={index}>
-                  <td className="border">{document.name}</td>
-                  <td className="border">{document.created_by_name}</td>
-                  <td className="border">{formatDateHR(new Date(document.updated_at))}</td>
-                  <td className="border">
-                    <button
-                      onClick={() => router.push(`/procedure/${document.id}`)}
-                      className="float-right mb-4 bg-blue-200 p-2 rounded"
-                    >
-                      <FontAwesomeIcon icon={faEye} />
-                    </button>
-                    <button
-                      onClick={() => router.push(`/procedure/${document.id}/izmjena`)}
-                      className="float-right mb-4 bg-orange-200 p-2 rounded"
-                    >
-                      <FontAwesomeIcon icon={faPen} />
-                    </button>
+                  <td className="border px-2 py-2">{document.name}</td>
+                  <td className="border px-2 py-2">{document.created_by_name}</td>
+                  <td className="border px-2 py-2">{formatDateHR(new Date(document.updated_at))}</td>
+                  <td className="border py-2 items-center">
+                    <div className="tooltip" data-tip="Pregledaj">
+                      <button
+                        onClick={() => router.push(`/procedure/${document.id}`)}
+                        className="bg-blue-200 p-1 rounded mr-1"
+                      >
+                        <FontAwesomeIcon icon={faEye} />
+                      </button>
+                    </div>
+                      <div className="tooltip" data-tip="Uredi">
+                        <button
+                          onClick={() => router.push(`/procedure/${document.id}/izmjena`)}
+                          className="bg-orange-200 p-1 rounded"
+                        >
+                          <FontAwesomeIcon icon={faPen} />
+                        </button>
+                      </div>
                   </td>
                 </tr>
-              ))}
+                ))}
               </tbody>
             </table>
             <dialog id="document_form"
                     className="modal modal-bottom sm:modal-middle bg-white sm:rounded-lg h-1/2 w-1/2 top-1/4 left-1/4">
               <button className="btn btn-sm btn-circle btn-ghost absolute right-5 top-5"
-                      onClick={() => document.getElementById('document_form')?.close()}>x
+                      onClick={() => (document.getElementById('document_form') as HTMLDialogElement)?.close()}>x
               </button>
               <Formik
                 initialValues={{ name: '', description: '' }}
