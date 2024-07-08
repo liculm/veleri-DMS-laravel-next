@@ -23,6 +23,7 @@ class DocumentVersion extends BaseModel
         'version_number',
         'academic_year',
         'approved_by_user_id',
+        'status_id',
         'document_data',
         'modified_by_id',
         'modified_by_name',
@@ -40,5 +41,10 @@ class DocumentVersion extends BaseModel
     public function approvedBy(): BelongsTo
     {
         return $this->belongsTo(User::class, 'approved_by_user_id');
+    }
+
+    public function status(): BelongsTo
+    {
+        return $this->belongsTo(Status::class);
     }
 }
