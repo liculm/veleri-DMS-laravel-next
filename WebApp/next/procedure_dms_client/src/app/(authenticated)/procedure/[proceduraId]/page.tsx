@@ -7,9 +7,10 @@ import Dropdown from '@/components/Dropdown'
 import VersionDetails from '@/components/Documents/VersionDetails'
 import JSONEditor, { JSONEditorOptions, OnClassNameParams } from 'jsoneditor'
 import lodash from 'lodash'
-import { formatDateHR, formatDateTimeHR } from '@/helpers/DateHelper'
+import { formatDateTimeHR } from '@/helpers/DateHelper'
 import '../../../../../node_modules/jsoneditor/dist/jsoneditor.css'
 import DocumentDetails from '@/components/Documents/DocumentDetails'
+import { croatianTranslations } from '@/translation/jsonEditorTranslation'
 
 export default function Procedura({ params }: { params: { proceduraId: string } }) {
   const [document, setDocument] = useState<DocumentWithVersions | null>(null)
@@ -19,11 +20,15 @@ export default function Procedura({ params }: { params: { proceduraId: string } 
   const selectedVersionEditorRef = useRef(null)
   const compareVersionEditorRef = useRef(null)
 
+  const isMounted = useRef(false)
+
   const editorOptions: JSONEditorOptions = {
     name: 'Dokument',
     mode: 'view',
     mainMenuBar: true,
     navigationBar: false,
+    languages: croatianTranslations,
+    language: 'hr'
   }
 
   function checkDifferences(path: readonly string[]): string {
@@ -38,12 +43,17 @@ export default function Procedura({ params }: { params: { proceduraId: string } 
   }
 
   const fetchData = () => {
-    axios.get<DocumentWithVersions>(`api/documents/${params.proceduraId}/versions`)
-      .then(({ data }) => {
-        data.updated_at = new Date(data.updated_at).toDateString()
-        setDocument(data)
-      })
-      .catch(error => console.error(error))
+
+    if (!isMounted.current) {
+      axios.get<DocumentWithVersions>(`api/documents/${params.proceduraId}/versions`)
+        .then(({ data }) => {
+          data.updated_at = new Date(data.updated_at).toDateString()
+          setDocument(data)
+        })
+        .catch(error => console.error(error))
+
+      isMounted.current = true
+    }
   }
 
   useEffect(fetchData, [params.proceduraId])
@@ -95,12 +105,13 @@ export default function Procedura({ params }: { params: { proceduraId: string } 
           ) : (
             <div className="flex justify-between">
               <Dropdown
+                align={'left'}
                 trigger={<button
                   className={`bg-green-200 sm:rounded-lg shadow-sm p-2 ${selectedVersion && compareVersion ? 'cursor-not-allowed' : ''}`}
                   disabled={!!(selectedVersion && compareVersion)}
                 >Verzija</button>}>
                 {document.versions.map((version, index) => (
-                  <div key={index} className="p-2 border-b border-gray-200 cursor-pointer w-max"
+                  <div key={index} className={`p-2 border-b border-gray-200 cursor-pointer w-max ${version.approved_by_user_id ? 'bg-green-50' : ''}`}
                        onClick={() => setSelectedVersion(version)}>
                     <p><strong>Verzija: </strong> {version.version_number}</p>
                     <p><strong>Akademska godina: </strong> {version.academic_year}</p>
@@ -148,8 +159,8 @@ export default function Procedura({ params }: { params: { proceduraId: string } 
 
           {(selectedVersion && compareVersion) && (
             <div className="flex justify-between mt-6">
-              <div ref={selectedVersionEditorRef} className="jsoneditor w-1/2" />
-              <div ref={compareVersionEditorRef} className="jsoneditor w-1/2" />
+              <div ref={selectedVersionEditorRef} className="jsoneditor w-1/2 rounded-s" />
+              <div ref={compareVersionEditorRef} className="jsoneditor w-1/2 rounded-s" />
             </div>
           )}
         </div>

@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import axios from '@/lib/axios'
 import { Document } from '@/types/Document'
 import { useRouter } from 'next/navigation'
@@ -19,18 +19,25 @@ export default function ProcedurePage() {
   const [documents, setDocuments] = useState<Document[]>([])
   const [submitting, setSubmitting] = useState(false)
 
+  const isMounted = useRef(false)
+  const router = useRouter()
+
   const fetchData = () => {
-    axios.get('api/documents')
-      .then(({ data }) => {
-        const returnedDocuments = data as Document[]
+    if (!isMounted.current) {
+      axios.get('api/documents')
+        .then(({ data }) => {
+          const returnedDocuments = data as Document[]
 
-        returnedDocuments.map((document: Document) => {
-          document.updated_at = new Date(document.updated_at).toDateString()
+          returnedDocuments.map((document: Document) => {
+            document.updated_at = new Date(document.updated_at).toDateString()
+          })
+
+          return setDocuments(returnedDocuments)
         })
+        .catch(error => console.error(error))
 
-        return setDocuments(returnedDocuments)
-      })
-      .catch(error => console.error(error))
+      isMounted.current = true
+    }
   }
 
   const handleSubmit = async (values: AddDocumentPayload) => {
@@ -43,7 +50,7 @@ export default function ProcedurePage() {
       console.log(error)
     })
 
-    fetchData()
+    dismount()
 
     setSubmitting(false)
   }
@@ -53,9 +60,12 @@ export default function ProcedurePage() {
     description: Yup.string().required('Opis procedure je obavezno polje.'),
   })
 
-
   useEffect(fetchData, [])
-  const router = useRouter()
+
+  function dismount() {
+    isMounted.current = false;
+    fetchData();
+  }
 
   if (submitting) {
     return <div className="flex justify-center items-center h-screen">
@@ -73,7 +83,7 @@ export default function ProcedurePage() {
               Dodaj novu proceduru
             </button>
             <button
-              onClick={fetchData}
+              onClick={dismount}
               className="float-right mb-4 bg-blue-300 p-2 rounded"
             >
               <FontAwesomeIcon icon={faRepeat} />

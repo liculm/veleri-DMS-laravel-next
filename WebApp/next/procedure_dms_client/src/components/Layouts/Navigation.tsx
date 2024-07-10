@@ -35,7 +35,7 @@ const Navigation = ({ user }: { user: UserType }) => {
             {/* Navigation Links */}
             <div className="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
               <NavLink href="/procedure" active={pathname === '/procedure'}>
-                Pregled procedura
+                Procedure
               </NavLink>
 
 
@@ -110,7 +110,7 @@ const Navigation = ({ user }: { user: UserType }) => {
             <ResponsiveNavLink
               href="/procedure"
               active={pathname === '/procedure'}>
-              Pregled procedura
+              Procedure
             </ResponsiveNavLink>
           </div>
 

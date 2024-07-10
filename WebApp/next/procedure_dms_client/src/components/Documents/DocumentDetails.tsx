@@ -6,7 +6,6 @@ import * as Yup from 'yup'
 import axios from '@/lib/axios'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPen } from '@fortawesome/free-solid-svg-icons'
-import { useRouter } from 'next/navigation'
 
 interface DocumentDetailsProps {
   documentWithVersions: DocumentWithVersions;

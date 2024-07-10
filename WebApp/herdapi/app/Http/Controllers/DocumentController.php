@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Document;
+use App\Models\DocumentVersion;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -66,5 +67,46 @@ class DocumentController extends Controller
             ]);
 
         return response()->json($validatedData, 201);
+    }
+
+    public function documentVersion($id): JsonResponse
+    {
+        $version = DocumentVersion::query()
+            ->where('id', $id)
+            ->first();
+
+        if ($version) {
+            return response()->json($version);
+        } else {
+            return response()->json(['error' => 'Document not found'], 404);
+        }
+    }
+
+    public function addDocumentVersion(Request $request, $id): JsonResponse
+    {
+        $user = $request->user();
+
+        $validatedData = $request->validate([
+            'academic_year' => 'required|max:255'
+        ]);
+
+        // find the biggest version number for the document and add 1
+        $latestVersion = DocumentVersion::query()
+            ->where('document_id', $id)
+            ->max('version_number');
+
+        $validatedData['document_id'] = $id;
+        $validatedData['version_number'] = $latestVersion + 1;
+        $validatedData['created_by_id'] = $user->id;
+        $validatedData['created_by_name'] = $user->name;
+        $validatedData['modified_by_id'] = $user->id;
+        $validatedData['modified_by_name'] = $user->name;
+        $validatedData['document_data'] = $request->document_data;
+        //TODO: fix this
+        $validatedData['approved_by_user_id'] = $user->id;
+
+        $documentVersion = DocumentVersion::create($validatedData);
+
+        return response()->json($documentVersion, 201);
     }
 }
