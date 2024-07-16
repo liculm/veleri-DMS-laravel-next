@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\DocumentController;
+use App\Http\Controllers\WordController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -21,3 +22,5 @@ Route::middleware(['auth:sanctum'])->put('/documents', [DocumentController::clas
 Route::middleware(['auth:sanctum'])->get('/documents/version/{id}', [DocumentController::class, 'documentVersion']);
 
 Route::middleware(['auth:sanctum'])->post('/documents/version/{id}', [DocumentController::class, 'addDocumentVersion']);
+
+Route::middleware(['auth:sanctum'])->post('/documents/version/{proceduraId}/word/{versionId}', [WordController::class, 'createWordFile']);

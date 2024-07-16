@@ -6,10 +6,11 @@
     "license": "MIT",
     "require": {
         "php": "^8.2",
+        "ext-couchbase": "*",
         "laravel/framework": "^11.0",
         "laravel/sanctum": "^4.0",
         "laravel/tinker": "^2.9",
-        "ext-couchbase": "*"
+        "phpoffice/phpword": "^1.2"
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",

@@ -5,12 +5,12 @@ import { DocumentVersion, DocumentWithVersions } from '@/types/Document'
 import React, { useEffect, useRef, useState } from 'react'
 import { formatDateHR } from '@/helpers/DateHelper'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faClone, faRepeat } from '@fortawesome/free-solid-svg-icons'
+import { faClone, faFile, faRepeat } from '@fortawesome/free-solid-svg-icons'
 import DocumentDetails from '@/components/Documents/DocumentDetails'
 import { useRouter } from 'next/navigation'
 
 export default function IzmjenaDokumentaPage({ params }: { params: { proceduraId: string } }) {
-  const [document, setDocument] = useState<DocumentWithVersions | null>(null)
+  const [documentWithVersions, setDocumentWithVersions] = useState<DocumentWithVersions | null>(null)
 
   const isMounted = useRef(false);
   const router = useRouter()
@@ -21,7 +21,7 @@ export default function IzmjenaDokumentaPage({ params }: { params: { proceduraId
       axios.get<DocumentWithVersions>(`api/documents/${params.proceduraId}/versions`)
         .then(({ data }) => {
           data.updated_at = new Date(data.updated_at).toDateString()
-          setDocument(data)
+          setDocumentWithVersions(data)
         })
         .catch(error => console.error(error))
 
@@ -36,12 +36,40 @@ export default function IzmjenaDokumentaPage({ params }: { params: { proceduraId
     fetchData();
   }
 
+  function createWordDocument(id: number) {
+    axios.post<any>(`api/documents/version/${params.proceduraId}/word/${id}`, null, {
+      responseType: 'blob'
+    })
+      .then(({ data }) => {
+
+        const camelCaseDocumentName = documentWithVersions?.name
+          .toLowerCase()
+          .split(' ')
+          .map((word, index) => index === 0 ? word : word.charAt(0).toUpperCase() + word.slice(1))
+          .join('');
+
+        const fileURL = window.URL.createObjectURL(new Blob([data]));
+        const fileLink = document.createElement('a');
+
+        fileLink.href = fileURL;
+        fileLink.setAttribute('download', camelCaseDocumentName + '.docx');
+
+        document.body.appendChild(fileLink);
+
+        fileLink.click();
+        fileLink.remove(); // Clean up
+
+        window.URL.revokeObjectURL(fileURL)
+      })
+      .catch(error => console.error(error))
+  }
+
   return (
     <div className="py-12">
       <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
         <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-          {document && (
-            <DocumentDetails documentWithVersions={document} showEditButton={true} />
+          {documentWithVersions && (
+            <DocumentDetails documentWithVersions={documentWithVersions} showEditButton={true} />
           )}
         </div>
         <div className="bg-white p-4 rounded-lg pb-14 mt-4">
@@ -58,7 +86,7 @@ export default function IzmjenaDokumentaPage({ params }: { params: { proceduraId
               Dodaj novu verziju procedure
             </button>
           </div>
-          {document && document.versions.length > 0 ? (
+          {documentWithVersions && documentWithVersions.versions.length > 0 ? (
             <table className="table-auto w-full">
               <thead>
               <tr>
@@ -70,7 +98,7 @@ export default function IzmjenaDokumentaPage({ params }: { params: { proceduraId
               </tr>
               </thead>
               <tbody>
-              {document.versions.map((version: DocumentVersion, index) => (
+              {documentWithVersions.versions.map((version: DocumentVersion, index) => (
                 <tr key={index}>
                   <td className="border px-4 py-2">{version.version_number}</td>
                   <td className="border px-4 py-2">{version.academic_year}</td>
@@ -83,6 +111,14 @@ export default function IzmjenaDokumentaPage({ params }: { params: { proceduraId
                         className="bg-blue-200 p-1 rounded"
                       >
                         <FontAwesomeIcon icon={faClone} />
+                      </button>
+                    </div>
+                    <div className="tooltip" data-tip="Kreiraj Word dokument">
+                      <button
+                        onClick={() => createWordDocument(version.id)}
+                        className="ml-3 bg-green-200 p-1 rounded"
+                      >
+                        <FontAwesomeIcon icon={faFile} />
                       </button>
                     </div>
                   </td>
