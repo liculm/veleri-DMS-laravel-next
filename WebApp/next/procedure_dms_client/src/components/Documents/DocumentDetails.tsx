@@ -65,7 +65,7 @@ const DocumentDetails: React.FC<DocumentDetailsProps> = ({ documentWithVersions,
     <div className="p-6 bg-white border-b border-gray-200 flex flex-wrap">
       <div className="w-1/2 p-2">
         <p><strong>Ime procedure: </strong> {documentWithVersionsProp.name}</p>
-        <p><strong>Posljednje ažurirano: </strong> {formatDateTimeHR(new Date(documentWithVersionsProp.updated_at))}</p>
+        <p><strong>Posljednje ažurirano: </strong> {formatDateHR(new Date(documentWithVersionsProp.updated_at))}</p>
       </div>
       <div className="w-1/2 p-2">
         <p><strong>Inicijalno kreirano od strane: </strong> {documentWithVersionsProp.created_by_name}</p>
