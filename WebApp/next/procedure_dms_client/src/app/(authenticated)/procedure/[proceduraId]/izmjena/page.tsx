@@ -113,7 +113,7 @@ export default function IzmjenaDokumentaPage({ params }: { params: { proceduraId
                         <FontAwesomeIcon icon={faClone} />
                       </button>
                     </div>
-                    <div className="tooltip" data-tip="Kreiraj Word dokument">
+                    <div className="tooltip" data-tip="Preuzmi Word dokument">
                       <button
                         onClick={() => createWordDocument(version.id)}
                         className="ml-3 bg-green-200 p-1 rounded"
