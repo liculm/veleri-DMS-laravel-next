@@ -80,14 +80,67 @@ class WordController extends Controller
         $table3->addRow();
         $table3->addCell(9000)->addText('');
         $table3->addRow();
-        $table3->addCell(9000)->addText('SVRHA PROCEDURE', array('bold' => true), array('backgroundColor' => '808080'));
+        $table3->addCell(9000, array('shading' => array('fill' => 'D3D3D3')))->addText('SVRHA PROCEDURE', array('bold' => true));
         $table3->addRow();
         $table3->addCell(9000)->addText($document->description);
 
-        $table3->addRow();
-        $table3->addCell(9000)->addText('OPIS PROCESA');
-        $table3->addRow();
-        $table3->addCell(9000)->addText($document->description);
+        // Assuming $version->document_data is a JSON object like {"array1": ["item1", "item2"], "array2": ["item3", "item4"]}
+
+        $listStyleName = 'myListStyle';
+        $phpWord->addNumberingStyle(
+            $listStyleName,
+            array('type' => 'multilevel', 'levels' => array(
+                array('format' => 'decimal', 'text' => '%1.', 'left' => 360, 'hanging' => 360, 'tabPos' => 360)
+            ))
+        );
+
+        $listNumber = 1;
+
+        $noBorderStyle = array('borderTopSize' => 0, 'borderTopColor' => 'FFFFFF','borderBottomSize' => 0, 'borderBottomColor' => 'FFFFFF', 'cellMargin' => 80);
+
+
+        // Assuming $version->document_data is a JSON object like {"array1": ["item1", "item2"], "array2": ["item3", "item4"]}
+        $documentData = $version->document_data;
+        if ($documentData && is_array($documentData)) {
+            foreach ($documentData as $key => $values) {
+                $formattedKey = strtoupper(str_replace('_', ' ', $key));
+
+                // Add a new row for the array name
+                $table3->addRow();
+                $table3->addCell(9000, array('shading' => array('fill' => 'D3D3D3')))->addText($formattedKey, array('bold' => true));
+
+                if (is_array($values)) {
+                    foreach ($values as $value) {
+                        // Add a new row for each value as a list item with manual numbering
+                        $table3->addRow();
+                        $tableCell = $table3->addCell(9000, $noBorderStyle);
+                        $tableCell->addText("{$listNumber}. {$value}");
+                        $listNumber++; // Increment the list number
+                    }
+                }
+                // Optionally reset the list number here if you want to start from 1 for each key
+                $listNumber = 1;
+            }
+        }
+
+        $secondSection = $phpWord->addSection(array(
+            'marginTop' => 1000,
+            'marginBottom' => 2000,
+            'marginLeft' => 800,
+            'marginRight' => 800
+        ));
+
+        $madeByTable = $secondSection->addTable('StyledTable');
+
+        $madeByTable->addRow();
+        $madeByTable->addCell(2000)->addText('IZRADIO/LA');
+        $madeByTable->addCell(4000)->addText($version->created_by_name);
+        $madeByTable->addCell(3000)->addText('');
+
+        $madeByTable->addRow();
+        $madeByTable->addCell(2000)->addText('Odobrio/LA');
+        $madeByTable->addCell(4000)->addText($version->modified_by_name);
+        $madeByTable->addCell(3000)->addText('Datum: ' . $version->created_at);
 
         // Use an in-memory file stream to generate the document
         $xmlWriter = IOFactory::createWriter($phpWord);
@@ -96,7 +149,6 @@ class WordController extends Controller
 
         // Return the file as a download response
         return response()->download($tempFile, $document->name . '.docx')->deleteFileAfterSend();
-
 
 
 //        // Define the file name and path to save the document
