@@ -4,6 +4,11 @@ export interface Document {
     id: number;
     name: string;
     description: string;
+    organizationUnit: string;
+    documentCode: string;
+    responsibleStaff: string;
+    timePeriod: string;
+    interdependence: string;
     created_by_id: number;
     created_by_name: string;
     created_at: Date | string;
