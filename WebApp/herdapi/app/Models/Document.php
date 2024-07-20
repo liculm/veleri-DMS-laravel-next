@@ -27,6 +27,11 @@ class Document extends BaseModel
         'description',
         'created_by_id',
         'created_by_name',
+        'organizationUnit',
+        'documentCode',
+        'responsibleStaff',
+        'timePeriod',
+        'interdependence'
     ];
 
     public function versions(): HasMany
