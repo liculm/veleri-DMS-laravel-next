@@ -41,6 +41,11 @@ class DocumentController extends Controller
         $validatedData = $request->validate([
             'name' => 'required|max:255',
             'description' => 'required|max:1000',
+            'organizationUnit' => 'required|max:255',
+            'documentCode' => 'required|max:255',
+            'responsibleStaff' => 'required|max:255',
+            'timePeriod' => 'required|max:255',
+            'interdependence' => 'required|max:255',
         ]);
 
         $validatedData['created_by_id'] = $user->id;
@@ -57,6 +62,11 @@ class DocumentController extends Controller
             'id' => 'required|exists:document,id',
             'name' => 'required|max:255',
             'description' => 'required|max:1000',
+            'organizationUnit' => 'required|max:255',
+            'documentCode' => 'required|max:255',
+            'responsibleStaff' => 'required|max:255',
+            'timePeriod' => 'required|max:255',
+            'interdependence' => 'required|max:255',
         ]);
 
         DB::table('document')
@@ -64,6 +74,11 @@ class DocumentController extends Controller
             ->update([
                 'name' => $validatedData['name'],
                 'description' => $validatedData['description'],
+                'organizationUnit' => $validatedData['organizationUnit'],
+                'documentCode' => $validatedData['documentCode'],
+                'responsibleStaff' => $validatedData['responsibleStaff'],
+                'timePeriod' => $validatedData['timePeriod'],
+                'interdependence' => $validatedData['interdependence'],
             ]);
 
         return response()->json($validatedData, 201);

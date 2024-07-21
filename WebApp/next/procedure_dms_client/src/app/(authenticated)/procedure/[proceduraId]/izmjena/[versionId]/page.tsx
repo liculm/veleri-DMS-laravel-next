@@ -6,8 +6,9 @@ import React, { useEffect, useRef, useState } from 'react'
 import JSONEditor, { JSONEditorOptions } from 'jsoneditor'
 import '../../../../../../../node_modules/jsoneditor/dist/jsoneditor.css'
 import { croatianTranslations } from '@/translation/jsonEditorTranslation'
-import { Formik, Form, Field } from 'formik'
+import { Formik, Form, Field, ErrorMessage } from 'formik'
 import { useRouter } from 'next/navigation'
+import * as Yup from 'yup'
 
 export default function IzmjenaVerzijePage({ params }: { params: { versionId: number, proceduraId: number } }) {
   const [version, setVersion] = useState<DocumentVersion | null>(null)
@@ -79,13 +80,16 @@ export default function IzmjenaVerzijePage({ params }: { params: { versionId: nu
       }
 
       axios.post<DocumentVersion>(`api/documents/version/${params.proceduraId}`, newVersion)
-        .then(({ data }) => {
-
+        .then(() => {
+          router.back()
         })
         .catch(error => console.error(error))
-
     }
   }
+
+  const DocumentVersionSchema = Yup.object().shape({
+    academic_year: Yup.string().required('Akademska godina je obavezno polje.')
+  })
 
   if (!version && params.versionId != 0) {
     return <div className="flex justify-center items-center h-screen">
@@ -99,6 +103,7 @@ export default function IzmjenaVerzijePage({ params }: { params: { versionId: nu
         <div className="bg-white shadow-sm sm:rounded-lg">
           <Formik
             initialValues={{ academic_year: version?.academic_year }}
+            validationSchema={DocumentVersionSchema}
             onSubmit={(values) => {
               handleSave(values)
             }}
@@ -116,6 +121,7 @@ export default function IzmjenaVerzijePage({ params }: { params: { versionId: nu
                         </option>
                       ))}
                     </Field>
+                    <ErrorMessage className="text-xs text-red-500" name="academic_year" component="div" />
                   </div>
 
                   {(versionEditorRef) && (

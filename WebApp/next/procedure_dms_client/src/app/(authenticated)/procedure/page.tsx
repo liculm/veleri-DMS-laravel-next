@@ -140,13 +140,13 @@ export default function ProcedurePage() {
                     <label className="block text-sm font-medium text-gray-700">Naziv procedure:</label>
                     <Field type="text" name="name"
                            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" />
-                    <ErrorMessage name="name" component="div" />
+                    <ErrorMessage className="text-xs text-red-500" name="name" component="div" />
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-gray-700">Opis:</label>
                     <Field as="textarea" name="description"
                            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" />
-                    <ErrorMessage name="description" component="div" />
+                    <ErrorMessage className="text-xs text-red-500" name="description" component="div" />
                   </div>
                   <button type="submit"
                           className="py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">Spremi
