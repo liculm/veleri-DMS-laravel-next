@@ -6,3 +6,6 @@
 .code-line-updated {
     background-color: #fae4c5;
 }
+
+.indent-1 { margin-left: 0.5em; }
+.indent-2 { margin-left: 1em; }
