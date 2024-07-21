@@ -96,8 +96,13 @@ class WordController extends Controller
 
         $listNumber = 1;
 
-        $noBorderStyle = array('borderTopSize' => 0, 'borderTopColor' => 'FFFFFF','borderBottomSize' => 0, 'borderBottomColor' => 'FFFFFF', 'cellMargin' => 80);
-
+        $noBorderStyle = array(
+            'borderTopSize' => 0,
+            'borderTopColor' => 'FFFFFF',
+            'borderBottomSize' => 0,
+            'borderBottomColor' => 'FFFFFF',
+            'cellMargin' => 80
+        );
 
         // Assuming $version->document_data is a JSON object like {"array1": ["item1", "item2"], "array2": ["item3", "item4"]}
         $documentData = $version->document_data;
@@ -111,11 +116,29 @@ class WordController extends Controller
 
                 if (is_array($values)) {
                     foreach ($values as $value) {
-                        // Add a new row for each value as a list item with manual numbering
                         $table3->addRow();
-                        $tableCell = $table3->addCell(9000, $noBorderStyle);
-                        $tableCell->addText("{$listNumber}. {$value}");
-                        $listNumber++; // Increment the list number
+                        if (is_array($value)) {
+                            $subValues = current($value);
+
+                            // If the value is an array, add a new row for the key
+                            $table3->addCell(9000, $noBorderStyle)->addText(collect($value)->keys()->first(), array('bold' => true));
+                            $subListNumber = 1;
+
+                            foreach ($subValues as $subValue) {
+                                $table3->addRow();
+
+                                // Add a new row for each value as a list item with manual numbering
+                                $tableCell = $table3->addCell(9000, $noBorderStyle);
+                                $tableCell->addText("\t{$subListNumber}. {$subValue}");
+                                $subListNumber++; // Increment the list number
+                            }
+                        } else {
+                            // Add a new row for each value as a list item with manual numbering
+                            $tableCell = $table3->addCell(9000, $noBorderStyle);
+                            $tableCell->addText("{$listNumber}. {$value}");
+                            $listNumber++; // Increment the list number
+                        }
+
                     }
                 }
                 // Optionally reset the list number here if you want to start from 1 for each key
