@@ -109,7 +109,7 @@ const DocumentDetails: React.FC<DocumentDetailsProps> = ({ documentWithVersions,
       )}
 
       <dialog id="document_form"
-              className="modal modal-bottom sm:modal-middle bg-white sm:rounded-lg h-2/3 w-1/2 top-1/4 left-1/4 scroll-smooth overflow-scroll	">
+              className="modal modal-bottom sm:modal-middle bg-white sm:rounded-lg h-2/3 w-1/2 top-1/4 left-1/4 scroll-smooth overflow-scroll overflow-x-hidden">
         <button className="btn btn-sm btn-circle btn-ghost absolute right-5 top-5"
                 onClick={() => (document.getElementById('document_form') as HTMLDialogElement)?.close()}>x
         </button>

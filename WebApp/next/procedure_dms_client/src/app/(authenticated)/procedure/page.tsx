@@ -13,6 +13,11 @@ import { faEye, faPen, faRepeat } from '@fortawesome/free-solid-svg-icons'
 interface AddDocumentPayload {
   name: string
   description: string
+  organizationUnit: string
+  documentCode: string
+  responsibleStaff: string
+  timePeriod: string
+  interdependence: string
 }
 
 export default function ProcedurePage() {
@@ -58,6 +63,11 @@ export default function ProcedurePage() {
   const DocumentSchema = Yup.object().shape({
     name: Yup.string().required('Naziv procedure je obavezno polje.'),
     description: Yup.string().required('Opis procedure je obavezno polje.'),
+    organizationUnit: Yup.string().required('Organizacijska jedinica je obavezno polje.'),
+    documentCode: Yup.string().required('Šifra procedure je obavezno polje.'),
+    responsibleStaff: Yup.string().required('Odgovorne osobe su obavezno polje.'),
+    timePeriod: Yup.string().required('Vremenska dinamika je obavezno polje.'),
+    interdependence: Yup.string().required('Međuovisnosti su obavezno polje.')
   })
 
   useEffect(fetchData, [])
@@ -126,16 +136,24 @@ export default function ProcedurePage() {
               </tbody>
             </table>
             <dialog id="document_form"
-                    className="modal modal-bottom sm:modal-middle bg-white sm:rounded-lg h-1/2 w-1/2 top-1/4 left-1/4">
+                    className="modal modal-bottom sm:modal-middle bg-white sm:rounded-lg h-2/3 w-1/2 top-1/4 left-1/4 scroll-smooth overflow-scroll overflow-x-hidden">
               <button className="btn btn-sm btn-circle btn-ghost absolute right-5 top-5"
                       onClick={() => (document.getElementById('document_form') as HTMLDialogElement)?.close()}>x
               </button>
               <Formik
-                initialValues={{ name: '', description: '' }}
+                initialValues={{
+                  name: '',
+                  description: '',
+                  organizationUnit: '',
+                  documentCode: '',
+                  responsibleStaff: '',
+                  timePeriod: '',
+                  interdependence: '',
+              }}
                 validationSchema={DocumentSchema}
                 onSubmit={handleSubmit}
               >
-                <Form className="space-y-5 p-5 w-full">
+                <Form className="space-y-5 p-5 w-full mt-5">
                   <div>
                     <label className="block text-sm font-medium text-gray-700">Naziv procedure:</label>
                     <Field type="text" name="name"
@@ -147,6 +165,36 @@ export default function ProcedurePage() {
                     <Field as="textarea" name="description"
                            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" />
                     <ErrorMessage className="text-xs text-red-500" name="description" component="div" />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700">Organizacijska jedinica:</label>
+                    <Field type="text" name="organizationUnit"
+                           className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" />
+                    <ErrorMessage className="text-xs text-red-500" name="organizationUnit" component="div" />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700">Šifra procedure:</label>
+                    <Field type="text" name="documentCode"
+                           className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" />
+                    <ErrorMessage className="text-xs text-red-500" name="documentCode" component="div" />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700">Odgovorne osobe:</label>
+                    <Field type="text" name="responsibleStaff"
+                           className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" />
+                    <ErrorMessage className="text-xs text-red-500" name="responsibleStaff" component="div" />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700">Vremenska dinamika:</label>
+                    <Field type="text" name="timePeriod"
+                           className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" />
+                    <ErrorMessage className="text-xs text-red-500" name="timePeriod" component="div" />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700">Međuovisnosti:</label>
+                    <Field type="text" name="interdependence"
+                           className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" />
+                    <ErrorMessage className="text-xs text-red-500" name="interdependence" component="div" />
                   </div>
                   <button type="submit"
                           className="py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">Spremi
