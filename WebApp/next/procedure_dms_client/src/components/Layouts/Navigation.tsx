@@ -12,6 +12,7 @@ import ApplicationLogo from '@/components/ApplicationLogo'
 
 import { UserType } from '@/types/User'
 import { useAuth } from '@/hooks/auth'
+import { Roles } from '@/enums/roles'
 
 const Navigation = ({ user }: { user: UserType }) => {
   const pathname = usePathname()
@@ -38,7 +39,12 @@ const Navigation = ({ user }: { user: UserType }) => {
                 Procedure
               </NavLink>
 
-
+              {/*if user role is Administrator show*/}
+              {user?.role_id && user?.role_id === Roles.admin && (
+                <NavLink href="/upravljanje-procedurama" active={pathname === '/upravljanje-procedurama'}>
+                  Upravljanje procedurama
+                </NavLink>
+              )}
             </div>
           </div>
 
@@ -111,6 +117,12 @@ const Navigation = ({ user }: { user: UserType }) => {
               href="/procedure"
               active={pathname === '/procedure'}>
               Procedure
+            </ResponsiveNavLink>
+
+            <ResponsiveNavLink
+              href="/upravljanje-procedurama"
+              active={pathname === '/upravljanje-procedurama'}>
+              Upravljanje procedurama
             </ResponsiveNavLink>
           </div>
 

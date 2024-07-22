@@ -26,6 +26,7 @@ export interface DocumentVersion {
     academic_year: string;
     approved_by_user_id: number;
     document_data: Procedura;
+    status_id: number;
     created_by_id: number;
     created_by_name: string;
     modified_by_id: number;

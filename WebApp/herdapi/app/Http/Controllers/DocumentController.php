@@ -58,6 +58,8 @@ class DocumentController extends Controller
 
     public function updateDocument(Request $request): JsonResponse
     {
+        $user = $request->user();
+
         $validatedData = $request->validate([
             'id' => 'required|exists:document,id',
             'name' => 'required|max:255',
@@ -79,6 +81,8 @@ class DocumentController extends Controller
                 'responsibleStaff' => $validatedData['responsibleStaff'],
                 'timePeriod' => $validatedData['timePeriod'],
                 'interdependence' => $validatedData['interdependence'],
+                'modified_by_id' => $user->id,
+                'modified_by_name' => $user->name
             ]);
 
         return response()->json($validatedData, 201);
@@ -117,11 +121,20 @@ class DocumentController extends Controller
         $validatedData['modified_by_id'] = $user->id;
         $validatedData['modified_by_name'] = $user->name;
         $validatedData['document_data'] = $request->document_data;
-        //TODO: fix this
-        $validatedData['approved_by_user_id'] = $user->id;
 
         $documentVersion = DocumentVersion::create($validatedData);
 
         return response()->json($documentVersion, 201);
+    }
+
+    public function getDocumentsWaitingForApproval(): JsonResponse
+    {
+        // Get all documents with their versions that have a version with a status of 1
+        $documents = Document::with(['versions' => function ($query) {
+            $query->where('status_id', 1);
+        }])->get();
+
+
+        return response()->json($documents);
     }
 }

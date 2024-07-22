@@ -93,6 +93,19 @@ export default function Procedura({ params }: { params: { proceduraId: string } 
     </div>
   }
 
+  function getDocumentVersionColor(versionStatusId: number): string {
+    switch (versionStatusId) {
+      case 4:
+        return 'bg-green-100'
+      case 3:
+        return 'bg-yellow-100'
+      case 2:
+        return 'bg-red-100'
+      default:
+        return ''
+    }
+  }
+
   return (
     <div className="py-12">
       <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
@@ -111,7 +124,7 @@ export default function Procedura({ params }: { params: { proceduraId: string } 
                   disabled={!!(selectedVersion && compareVersion)}
                 >Verzija</button>}>
                 {document.versions.map((version, index) => (
-                  <div key={index} className={`p-2 border-b border-gray-200 cursor-pointer w-max ${version.approved_by_user_id ? 'bg-green-50' : ''}`}
+                  <div key={index} className={`p-2 border-b border-gray-200 cursor-pointer w-max ${getDocumentVersionColor(version.status_id)}`}
                        onClick={() => setSelectedVersion(version)}>
                     <p><strong>Verzija: </strong> {version.version_number}</p>
                     <p><strong>Akademska godina: </strong> {version.academic_year}</p>
@@ -144,7 +157,7 @@ export default function Procedura({ params }: { params: { proceduraId: string } 
                   </div>
                 }>
                 {document.versions.filter(version => version !== selectedVersion).map((version, index) => (
-                  <div key={index} className="p-2 border-b border-gray-200 cursor-pointer w-max"
+                  <div key={index} className={`p-2 border-b border-gray-200 cursor-pointer w-max ${getDocumentVersionColor(version.status_id)}`}
                        onClick={() => setCompareVersion(version)}>
                     <p><strong>Verzija: </strong> {version.version_number}</p>
                     <p><strong>Akademska godina: </strong> {version.academic_year}</p>

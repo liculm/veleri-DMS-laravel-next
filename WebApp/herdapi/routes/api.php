@@ -24,3 +24,5 @@ Route::middleware(['auth:sanctum'])->get('/documents/version/{id}', [DocumentCon
 Route::middleware(['auth:sanctum'])->post('/documents/version/{id}', [DocumentController::class, 'addDocumentVersion']);
 
 Route::middleware(['auth:sanctum'])->post('/documents/version/{proceduraId}/word/{versionId}', [WordController::class, 'createWordFile']);
+
+Route::middleware(['auth:sanctum'])->get('/documents/waitingForApproval', [DocumentController::class, 'getDocumentsWaitingForApproval']);
