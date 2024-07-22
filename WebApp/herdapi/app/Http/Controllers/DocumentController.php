@@ -127,13 +127,17 @@ class DocumentController extends Controller
         return response()->json($documentVersion, 201);
     }
 
-    public function getDocumentsWaitingForApproval(): JsonResponse
+    public function getDocumentsForStatus($id): JsonResponse
     {
         // Get all documents with their versions that have a version with a status of 1
-        $documents = Document::with(['versions' => function ($query) {
-            $query->where('status_id', 1);
+        $documents = Document::with(['versions' => function ($query) use ($id) {
+            $query->where('status_id', $id);
         }])->get();
 
+        // Filter out documents that don't have any versions with the requested status
+        $documents = $documents->filter(function ($document) {
+            return $document->versions->count() > 0;
+        });
 
         return response()->json($documents);
     }
