@@ -3,10 +3,11 @@
 import React, { useState, useEffect, useRef } from 'react'
 import axios from '@/lib/axios'
 import { useRouter } from 'next/navigation'
-import { Document, DocumentWithVersions } from '@/types/Document'
-import { useAuth } from '@/hooks/auth'
+import { DocumentWithVersions } from '@/types/Document'
 import { formatDateTimeHR } from '@/helpers/DateHelper'
 import { DocumentVersionStatuses } from '@/enums/DocumentVersionStatuses'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faEye } from '@fortawesome/free-solid-svg-icons'
 
 export default function UpravljanjeProceduramaPage() {
   const [documentsWithVersions, setDocumentsWithVersions] = useState<DocumentWithVersions[]>([])
@@ -14,9 +15,6 @@ export default function UpravljanjeProceduramaPage() {
   const [httpRequestInProgress, setHttpRequestInProgress] = useState<boolean>(false)
 
   const router = useRouter()
-
-  const isMounted = useRef(false)
-
 
   useEffect(() => {
     if (currentStatusFilter) {
@@ -46,6 +44,19 @@ export default function UpravljanjeProceduramaPage() {
     { name: 'Odbijeno', colorClass: 'bg-red-100', filterValue: DocumentVersionStatuses.rejected },
     { name: 'Odobreno', colorClass: 'bg-green-100', filterValue: DocumentVersionStatuses.approved },
   ];
+
+  function updateVersionStatus(versionId: number, status: DocumentVersionStatuses) {
+    axios.put(`/api/documents/version/${versionId}/status`, { status })
+      .then(() => {
+        const updatedDocumentsWithVersions = documentsWithVersions.map((documentWithVersions) => ({
+          ...documentWithVersions,
+          versions: documentWithVersions.versions.filter((version) => version.id !== versionId),
+        }))
+
+        setDocumentsWithVersions(updatedDocumentsWithVersions)
+      })
+      .catch(error => console.error(error))
+  }
 
   return (
     <div className="py-12">
@@ -79,20 +90,34 @@ export default function UpravljanjeProceduramaPage() {
 
             {documentsWithVersions.map((documentWithVersions) => (
               <details key={documentWithVersions.id} className="collapse bg-gray-100 mb-4">
-                <summary className="collapse-title text-m font-medium">{documentWithVersions.name}</summary>
+                <summary className="collapse-title text-m font-medium">{documentWithVersions.name}
+                    <a className="float-right bg-blue-200 p-1 rounded"
+                      onClick={() => router.push(`/procedure/${documentWithVersions.id}`)}
+                    >
+                      <FontAwesomeIcon icon={faEye} />
+                    </a>
+                </summary>
                 <div className="collapse-content">
                   {documentWithVersions.versions.map((version) => (
                     <div key={version.id} className="flex justify-between items-center p-4 border-b border-gray-200">
-                        <div>
-                          <p><strong>Verzija: </strong> {version.version_number}</p>
+                      <div>
+                        <p><strong>Verzija: </strong> {version.version_number}</p>
                           <p><strong>Akademska godina: </strong> {version.academic_year}</p>
                           <p><strong>Kreirao: </strong> {version.created_by_name}</p>
                           <p><strong>Kreirano datuma: </strong> {formatDateTimeHR(new Date(version.created_at))}</p>
                         </div>
-                        <button onClick={() => handleDocumentClick(documentWithVersions.id)}
-                                className="btn btn-primary">Pregledaj
-                        </button>
+
+                      <div className="dropdown dropdown-left cursor-pointer">
+                        <label tabIndex={0} className="bg-gray-200 p-2 rounded cursor-pointer">Postavi status</label>
+                        <ul tabIndex={0} className="dropdown-content menu p-2 shadow bg-gray-100 rounded-box w-52">
+                          {statusFilters.filter((status) => status.filterValue != currentStatusFilter).map((filter) => (
+                            <li key={filter.name} className={`rounded-box ${filter.colorClass}`}>
+                              <a onClick={() => updateVersionStatus(version.id, filter.filterValue)}>{filter.name}</a>
+                            </li>
+                          ))}
+                        </ul>
                       </div>
+                    </div>
                     ),
                   )}
                 </div>

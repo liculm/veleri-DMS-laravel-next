@@ -25,7 +25,9 @@ class DocumentController extends Controller
 
     public function requestedDocumentWithVersions($id): JsonResponse
     {
-        $document = Document::with('versions')->find($id);
+        $document = Document::with(['versions' => function ($query) {
+            $query->orderByDesc('status_id');
+        }])->find($id);
 
         if ($document) {
             return response()->json($document);
@@ -140,5 +142,30 @@ class DocumentController extends Controller
         });
 
         return response()->json($documents);
+    }
+
+    public function updateDocumentVersionStatus(Request $request, $id): JsonResponse
+    {
+        $validatedData = $request->validate([
+            'status' => 'required|max:10|min:1'
+        ]);
+
+        $user = $request->user();
+
+        $documentVersion = DocumentVersion::query()
+            ->where('id', $id)
+            ->first();
+
+        if ($documentVersion) {
+            $documentVersion->status_id = $validatedData['status'];
+            $documentVersion->modified_by_id = $user->id;
+            $documentVersion->modified_by_name = $user->name;
+            $documentVersion->approved_by_user_id = $user->id;
+
+            $documentVersion->save();
+            return response()->json($documentVersion);
+        } else {
+            return response()->json(['error' => 'Document version not found'], 404);
+        }
     }
 }

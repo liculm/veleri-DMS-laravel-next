@@ -23,6 +23,8 @@ Route::middleware(['auth:sanctum'])->get('/documents/version/{id}', [DocumentCon
 
 Route::middleware(['auth:sanctum'])->post('/documents/version/{id}', [DocumentController::class, 'addDocumentVersion']);
 
+Route::middleware(['auth:sanctum'])->put('/documents/version/{id}/status', [DocumentController::class, 'updateDocumentVersionStatus']);
+
 Route::middleware(['auth:sanctum'])->post('/documents/version/{proceduraId}/word/{versionId}', [WordController::class, 'createWordFile']);
 
 Route::middleware(['auth:sanctum'])->get('/documents/withStatus/{id}', [DocumentController::class, 'getDocumentsForStatus']);
