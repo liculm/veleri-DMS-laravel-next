@@ -4,7 +4,7 @@ import React, { useState, useEffect, useRef } from 'react'
 import axios from '@/lib/axios'
 import { useRouter } from 'next/navigation'
 import { DocumentWithVersions } from '@/types/Document'
-import { formatDateTimeHR } from '@/helpers/DateHelper'
+import { formatDateHR, formatDateTimeHR } from '@/helpers/DateHelper'
 import { DocumentVersionStatuses } from '@/enums/DocumentVersionStatuses'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEye } from '@fortawesome/free-solid-svg-icons'
@@ -91,7 +91,7 @@ export default function UpravljanjeProceduramaPage() {
             {documentsWithVersions.map((documentWithVersions) => (
               <details key={documentWithVersions.id} className="collapse bg-gray-100 mb-4">
                 <summary className="collapse-title text-m font-medium">{documentWithVersions.name}
-                    <a className="float-right bg-blue-200 p-1 rounded"
+                    <a className="float-right bg-gray-200 p-1 rounded"
                       onClick={() => router.push(`/procedure/${documentWithVersions.id}`)}
                     >
                       <FontAwesomeIcon icon={faEye} />
@@ -104,7 +104,7 @@ export default function UpravljanjeProceduramaPage() {
                         <p><strong>Verzija: </strong> {version.version_number}</p>
                           <p><strong>Akademska godina: </strong> {version.academic_year}</p>
                           <p><strong>Kreirao: </strong> {version.created_by_name}</p>
-                          <p><strong>Kreirano datuma: </strong> {formatDateTimeHR(new Date(version.created_at))}</p>
+                          <p><strong>Kreirano datuma: </strong> {formatDateHR(new Date(version.created_at))}</p>
                         </div>
 
                       <div className="dropdown dropdown-left cursor-pointer">

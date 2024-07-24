@@ -78,29 +78,32 @@ const DocumentDetails: React.FC<DocumentDetailsProps> = ({ documentWithVersions,
 
   return (
     <div className="p-6 bg-white border-b border-gray-200 flex flex-wrap">
-      <div className="w-1/2 p-2">
+      <div className="w-1/1 p-2">
         <p><strong>Naziv procedure: </strong> {documentWithVersionsProp.name}</p>
-        <p><strong>Organizacijska jedinica: </strong> {documentWithVersionsProp.organizationUnit}</p>
       </div>
       <div className="w-1/2 p-2">
         <p><strong>Šifra procedure: </strong> {documentWithVersionsProp.documentCode}</p>
-        <p><strong>Odgovorne osobe: </strong> {documentWithVersionsProp.responsibleStaff}</p>
-      </div>
-      <div className="w-1/2 p-2">
-        <p><strong>Vremenska dinamika: </strong> {documentWithVersionsProp.timePeriod}</p>
-        <p><strong>Međuovisnosti: </strong> {documentWithVersionsProp.interdependence}</p>
+        <p><strong>Organizacijska jedinica: </strong> {documentWithVersionsProp.organizationUnit}</p>
       </div>
       <div className="w-1/2 p-2">
         <p><strong>Posljednje ažurirano: </strong> {formatDateHR(new Date(documentWithVersionsProp.updated_at))}</p>
-        <p><strong>Inicijalno kreirano datuma: </strong> {formatDateHR(new Date(documentWithVersionsProp.created_at))}
-        </p>
+        <p><strong>Inicijalno kreirano datuma: </strong> {formatDateHR(new Date(documentWithVersionsProp.created_at))}</p>
+      </div>
+      <div className="w-1/1 p-2">
+        <p><strong>Odgovorne osobe: </strong> {documentWithVersionsProp.responsibleStaff}</p>
+      </div>
+      <div className="w-1/1 p-2">
+        <p><strong>Vremenska dinamika: </strong> {documentWithVersionsProp.timePeriod}</p>
+      </div>
+      <div className="w-1/1 p-2">
+        <p><strong>Međuovisnosti: </strong> {documentWithVersionsProp.interdependence}</p>
       </div>
       <div className="w-1/1 p-2">
         <p><strong>Opis: </strong> {documentWithVersionsProp.description}</p>
       </div>
 
       {(showEditButton) && (
-        <div className="tooltip" data-tip="Uredi">
+        <div className="tooltip tooltip-secondary" data-tip="Uredi">
           <button onClick={() => (document.getElementById('document_form') as HTMLDialogElement)?.showModal()}
                   className="py-2 px-4 bg-orange-200 p-1 rounded">
             <FontAwesomeIcon icon={faPen} />
@@ -109,7 +112,7 @@ const DocumentDetails: React.FC<DocumentDetailsProps> = ({ documentWithVersions,
       )}
 
       <dialog id="document_form"
-              className="modal modal-bottom sm:modal-middle bg-white sm:rounded-lg h-2/3 w-1/2 top-1/4 left-1/4 scroll-smooth overflow-scroll overflow-x-hidden">
+              className="modal modal-bottom sm:modal-middle bg-white sm:rounded-lg h-5/6 w-1/2 top-10 left-1/4 scroll-smooth overflow-scroll overflow-x-hidden">
         <button className="btn btn-sm btn-circle btn-ghost absolute right-5 top-5"
                 onClick={() => (document.getElementById('document_form') as HTMLDialogElement)?.close()}>x
         </button>

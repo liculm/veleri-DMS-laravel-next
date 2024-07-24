@@ -119,11 +119,14 @@ const Navigation = ({ user }: { user: UserType }) => {
               Procedure
             </ResponsiveNavLink>
 
-            <ResponsiveNavLink
-              href="/upravljanje-procedurama"
-              active={pathname === '/upravljanje-procedurama'}>
-              Upravljanje procedurama
-            </ResponsiveNavLink>
+            {/*if user role is Administrator show*/}
+            {user?.role_id && user?.role_id === Roles.admin && (
+              <ResponsiveNavLink
+                href="/upravljanje-procedurama"
+                active={pathname === '/upravljanje-procedurama'}>
+                Upravljanje procedurama
+              </ResponsiveNavLink>
+            )}
           </div>
 
           {/* Responsive Settings Options */}

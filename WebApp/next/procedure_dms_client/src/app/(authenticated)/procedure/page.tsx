@@ -9,6 +9,8 @@ import { ErrorMessage, Field, Form, Formik } from 'formik'
 import * as Yup from 'yup'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEye, faPen, faRepeat } from '@fortawesome/free-solid-svg-icons'
+import { useAuth } from '@/hooks/auth';
+import { Roles } from '@/enums/roles'
 
 interface AddDocumentPayload {
   name: string
@@ -21,6 +23,8 @@ interface AddDocumentPayload {
 }
 
 export default function ProcedurePage() {
+  const { user } = useAuth({});
+
   const [documents, setDocuments] = useState<Document[]>([])
   const [submitting, setSubmitting] = useState(false)
 
@@ -122,6 +126,7 @@ export default function ProcedurePage() {
                         <FontAwesomeIcon icon={faEye} />
                       </button>
                     </div>
+                    {user?.role_id && user?.role_id === Roles.admin && (
                       <div className="tooltip" data-tip="Uredi">
                         <button
                           onClick={() => router.push(`/procedure/${document.id}/izmjena`)}
@@ -130,13 +135,14 @@ export default function ProcedurePage() {
                           <FontAwesomeIcon icon={faPen} />
                         </button>
                       </div>
+                    )}
                   </td>
                 </tr>
                 ))}
               </tbody>
             </table>
             <dialog id="document_form"
-                    className="modal modal-bottom sm:modal-middle bg-white sm:rounded-lg h-2/3 w-1/2 top-1/4 left-1/4 scroll-smooth overflow-scroll overflow-x-hidden">
+                    className="modal modal-bottom sm:modal-middle bg-white sm:rounded-lg h-5/6 w-1/2 top-10 left-1/4 scroll-smooth overflow-scroll overflow-x-hidden">
               <button className="btn btn-sm btn-circle btn-ghost absolute right-5 top-5"
                       onClick={() => (document.getElementById('document_form') as HTMLDialogElement)?.close()}>x
               </button>
