@@ -89,7 +89,7 @@ export default function UpravljanjeProceduramaPage() {
             )}
 
             {documentsWithVersions.map((documentWithVersions) => (
-              <details key={documentWithVersions.id} className="collapse bg-gray-100 mb-4">
+              <details key={documentWithVersions.id} className="collapse bg-gray-100 mb-6 overflow-visible">
                 <summary className="collapse-title text-m font-medium">{documentWithVersions.name}
                     <a className="float-right bg-gray-200 p-1 rounded"
                       onClick={() => router.push(`/procedure/${documentWithVersions.id}`)}

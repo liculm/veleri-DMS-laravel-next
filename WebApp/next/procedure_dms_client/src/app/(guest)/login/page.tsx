@@ -58,7 +58,7 @@ const LoginPage = () => {
     <AuthCard
       logo={
         <Link href="/">
-          <ApplicationLogo className="w-20 h-20 fill-current text-gray-500" />
+          <ApplicationLogo className="fill-current text-gray-500" />
         </Link>
       }>
       <AuthSessionStatus className="mb-4" status={status} />
