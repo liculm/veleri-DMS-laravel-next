@@ -59,33 +59,42 @@ export default function Procedura({ params }: { params: { proceduraId: string } 
   useEffect(fetchData, [params.proceduraId])
 
   useEffect(() => {
-    if (selectedVersion && compareVersion) return
-  }, [selectedVersion])
+    let selectedVersionEditor;
+    let compareVersionEditor;
 
-  useEffect(() => {
     if (selectedVersionEditorRef.current && selectedVersion) {
-      new JSONEditor(
+      selectedVersionEditor = new JSONEditor(
         selectedVersionEditorRef.current,
         {
           ...editorOptions,
           onClassName: (classNameParams: OnClassNameParams) =>
             checkDifferences(classNameParams.path),
         },
-        selectedVersion.document_data)
+        selectedVersion.document_data
+      );
     }
 
     if (compareVersionEditorRef.current && compareVersion) {
-      new JSONEditor(
+      compareVersionEditor = new JSONEditor(
         compareVersionEditorRef.current,
         {
           ...editorOptions,
           onClassName: (classNameParams: OnClassNameParams) =>
             checkDifferences(classNameParams.path),
         },
-        compareVersion.document_data,
-      )
+        compareVersion.document_data
+      );
     }
-  }, [compareVersion])
+
+    return () => {
+      if (selectedVersionEditor) {
+        selectedVersionEditor.destroy();
+      }
+      if (compareVersionEditor) {
+        compareVersionEditor.destroy();
+      }
+    };
+  }, [selectedVersion, compareVersion]);
 
   if (!document) {
     return <div className="flex justify-center items-center h-screen">
@@ -135,7 +144,12 @@ export default function Procedura({ params }: { params: { proceduraId: string } 
               </Dropdown>
               {selectedVersion && (
                 <p>
-                  Trenutno odabrana verzija: <strong>{selectedVersion.version_number}</strong>
+                  Trenutno odabrana bazna verzija <strong>{selectedVersion.version_number}</strong>
+                  {compareVersion && selectedVersion && (
+                    <div>
+                      uspoređena sa verzijom <strong>{compareVersion.version_number}</strong>
+                    </div>
+                    )}
                 </p>
               )}
               <Dropdown
@@ -171,7 +185,7 @@ export default function Procedura({ params }: { params: { proceduraId: string } 
           {!(selectedVersion && compareVersion) && <VersionDetails selectedVersion={selectedVersion} />}
 
           {(selectedVersion && compareVersion) && (
-            <div className="flex justify-between mt-6">
+            <div className="flex justify-between mt-6 z-10">
               <div ref={selectedVersionEditorRef} className="jsoneditor w-1/2 rounded-s" />
               <div ref={compareVersionEditorRef} className="jsoneditor w-1/2 rounded-s" />
             </div>

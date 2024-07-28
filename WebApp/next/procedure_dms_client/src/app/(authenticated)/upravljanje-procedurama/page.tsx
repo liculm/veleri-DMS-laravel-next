@@ -18,21 +18,25 @@ export default function UpravljanjeProceduramaPage() {
 
   useEffect(() => {
     if (currentStatusFilter) {
-      setHttpRequestInProgress(true)
-      setDocumentsWithVersions([])
+      setHttpRequestInProgress(true);
+      setDocumentsWithVersions([]);
 
       axios.get(`/api/documents/withStatus/${currentStatusFilter}`)
         .then(response => {
-          setDocumentsWithVersions(response.data)
-          setHttpRequestInProgress(false)
+          console.log(response.data); // Log the response data to inspect its structure
+          if (Array.isArray(response.data)) {
+            setDocumentsWithVersions(response.data);
+          } else {
+            setDocumentsWithVersions([]); // Ensure it's an array
+          }
+          setHttpRequestInProgress(false);
         })
         .catch(error => {
-          setHttpRequestInProgress(false)
-          console.error(error)
-        })
+          setHttpRequestInProgress(false);
+          console.error(error);
+        });
     }
-
-  }, [currentStatusFilter])
+  }, [currentStatusFilter]);
 
   const handleDocumentClick = (documentId: number) => {
     router.push(`/procedure/${documentId}`)

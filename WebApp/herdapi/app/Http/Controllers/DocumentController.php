@@ -131,7 +131,7 @@ class DocumentController extends Controller
 
     public function getDocumentsForStatus($id): JsonResponse
     {
-        // Get all documents with their versions that have a version with a status of 1
+        // Get all documents with their versions that have a version with the requested status
         $documents = Document::with(['versions' => function ($query) use ($id) {
             $query->where('status_id', $id);
         }])->get();
@@ -141,7 +141,8 @@ class DocumentController extends Controller
             return $document->versions->count() > 0;
         });
 
-        return response()->json($documents);
+        // Always return as a list of documents
+        return response()->json($documents->values());
     }
 
     public function updateDocumentVersionStatus(Request $request, $id): JsonResponse
