@@ -1,26 +1,25 @@
 'use client'
 
-import React, { useState, useEffect, useRef } from 'react'
-import axios from '@/lib/axios'
-import { DocumentVersion, DocumentWithVersions } from '@/types/Document'
-import Dropdown from '@/components/Dropdown'
+import React, { useState, useEffect, useRef } from 'react';
+import axios from '@/lib/axios';
+import { DocumentVersion, DocumentWithVersions } from '@/types/Document';
+import JSONEditor, { JSONEditorOptions, OnClassNameParams } from 'jsoneditor';
+import lodash from 'lodash';
+import '../../../../../node_modules/jsoneditor/dist/jsoneditor.css';
+import DocumentDetails from '@/components/Documents/DocumentDetails';
+import { croatianTranslations } from '@/translation/jsonEditorTranslation';
+import VersionDropdown from '@/components/Documents/VersionDropdown';
 import VersionDetails from '@/components/Documents/VersionDetails'
-import JSONEditor, { JSONEditorOptions, OnClassNameParams } from 'jsoneditor'
-import lodash from 'lodash'
-import { formatDateTimeHR } from '@/helpers/DateHelper'
-import '../../../../../node_modules/jsoneditor/dist/jsoneditor.css'
-import DocumentDetails from '@/components/Documents/DocumentDetails'
-import { croatianTranslations } from '@/translation/jsonEditorTranslation'
 
 export default function Procedura({ params }: { params: { proceduraId: string } }) {
-  const [document, setDocument] = useState<DocumentWithVersions | null>(null)
-  const [selectedVersion, setSelectedVersion] = useState<DocumentVersion | null>(null)
-  const [compareVersion, setCompareVersion] = useState<DocumentVersion | null>(null)
+  const [document, setDocument] = useState<DocumentWithVersions | null>(null);
+  const [selectedVersion, setSelectedVersion] = useState<DocumentVersion | null>(null);
+  const [compareVersion, setCompareVersion] = useState<DocumentVersion | null>(null);
 
-  const selectedVersionEditorRef = useRef(null)
-  const compareVersionEditorRef = useRef(null)
+  const selectedVersionEditorRef = useRef(null);
+  const compareVersionEditorRef = useRef(null);
 
-  const isMounted = useRef(false)
+  const isMounted = useRef(false);
 
   const editorOptions: JSONEditorOptions = {
     name: 'Dokument',
@@ -28,39 +27,38 @@ export default function Procedura({ params }: { params: { proceduraId: string } 
     mainMenuBar: true,
     navigationBar: false,
     languages: croatianTranslations,
-    language: 'hr'
-  }
+    language: 'hr',
+  };
 
   function checkDifferences(path: readonly string[]): string {
-    const selectedVersionDocumentData = lodash.get(selectedVersion?.document_data, path)
-    const compareVersionDocumentData = lodash.get(compareVersion?.document_data, path)
+    const selectedVersionDocumentData = lodash.get(selectedVersion?.document_data, path);
+    const compareVersionDocumentData = lodash.get(compareVersion?.document_data, path);
 
-    const isEqual = lodash.isEqual(selectedVersionDocumentData, compareVersionDocumentData)
+    const isEqual = lodash.isEqual(selectedVersionDocumentData, compareVersionDocumentData);
 
-    if (isEqual) return ''
+    if (isEqual) return '';
 
-    return 'code-line-updated'
+    return 'code-line-updated';
   }
 
   const fetchData = () => {
-
     if (!isMounted.current) {
       axios.get<DocumentWithVersions>(`api/documents/${params.proceduraId}/versions`)
         .then(({ data }) => {
-          data.updated_at = new Date(data.updated_at).toDateString()
-          setDocument(data)
+          data.updated_at = new Date(data.updated_at).toDateString();
+          setDocument(data);
         })
-        .catch(error => console.error(error))
+        .catch(error => console.error(error));
 
-      isMounted.current = true
+      isMounted.current = true;
     }
-  }
+  };
 
-  useEffect(fetchData, [params.proceduraId])
+  useEffect(fetchData, [params.proceduraId]);
 
   useEffect(() => {
-    let selectedVersionEditor;
-    let compareVersionEditor;
+    let selectedVersionEditor: JSONEditor;
+    let compareVersionEditor: JSONEditor;
 
     if (selectedVersionEditorRef.current && selectedVersion) {
       selectedVersionEditor = new JSONEditor(
@@ -97,21 +95,23 @@ export default function Procedura({ params }: { params: { proceduraId: string } 
   }, [selectedVersion, compareVersion]);
 
   if (!document) {
-    return <div className="flex justify-center items-center h-screen">
-      <span className="loading loading-spinner text-neutral"></span>
-    </div>
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <span className="loading loading-spinner text-neutral"></span>
+      </div>
+    );
   }
 
   function getDocumentVersionColor(versionStatusId: number): string {
     switch (versionStatusId) {
       case 4:
-        return 'bg-green-100'
+        return 'bg-green-100';
       case 3:
-        return 'bg-yellow-100'
+        return 'bg-yellow-100';
       case 2:
-        return 'bg-red-100'
+        return 'bg-red-100';
       default:
-        return ''
+        return '';
     }
   }
 
@@ -125,63 +125,16 @@ export default function Procedura({ params }: { params: { proceduraId: string } 
           {!document.versions.length ? (
             <p>Nažalost, nema dostupnih verzija.</p>
           ) : (
-            <div className="flex justify-between">
-              <Dropdown
-                align={'left'}
-                trigger={<button
-                  className={`bg-green-200 sm:rounded-lg shadow-sm p-2 ${selectedVersion && compareVersion ? 'cursor-not-allowed' : ''}`}
-                  disabled={!!(selectedVersion && compareVersion)}
-                >Verzija</button>}>
-                {document.versions.map((version, index) => (
-                  <div key={index} className={`p-2 border-b border-gray-200 cursor-pointer w-max ${getDocumentVersionColor(version.status_id)}`}
-                       onClick={() => setSelectedVersion(version)}>
-                    <p><strong>Verzija: </strong> {version.version_number}</p>
-                    <p><strong>Akademska godina: </strong> {version.academic_year}</p>
-                    <p><strong>Kreirao: </strong> {version.created_by_name}</p>
-                    <p><strong>Kreirano datuma: </strong> {formatDateTimeHR(new Date(version.created_at))}</p>
-                  </div>
-                ))}
-              </Dropdown>
-              {selectedVersion && (
-                <p>
-                  Trenutno odabrana bazna verzija <strong>{selectedVersion.version_number}</strong>
-                  {compareVersion && selectedVersion && (
-                    <div>
-                      uspoređena sa verzijom <strong>{compareVersion.version_number}</strong>
-                    </div>
-                    )}
-                </p>
-              )}
-              <Dropdown
-                trigger={
-                  <div className="flex items-center">
-                    {selectedVersion && (
-                      <button className="bg-blue-200 sm:rounded-lg shadow-sm p-2">Usporedi sa</button>
-                    )}
-                    {compareVersion && (
-                      <button
-                        className="ml-2 bg-red-200 sm:rounded-lg shadow-sm p-2"
-                        onClick={() => {
-                          setCompareVersion(null)
-                        }}
-                      >
-                        Poništi usporedbu
-                      </button>
-                    )}
-                  </div>
-                }>
-                {document.versions.filter(version => version !== selectedVersion).map((version, index) => (
-                  <div key={index} className={`p-2 border-b border-gray-200 cursor-pointer w-max ${getDocumentVersionColor(version.status_id)}`}
-                       onClick={() => setCompareVersion(version)}>
-                    <p><strong>Verzija: </strong> {version.version_number}</p>
-                    <p><strong>Akademska godina: </strong> {version.academic_year}</p>
-                    <p><strong>Kreirao: </strong> {version.created_by_name}</p>
-                    <p><strong>Kreirano datuma: </strong> {formatDateTimeHR(new Date(version.created_at))}</p>
-                  </div>
-                ))}
-              </Dropdown>
-            </div>
+            <VersionDropdown
+              document={document}
+              selectedVersion={selectedVersion}
+              setSelectedVersion={setSelectedVersion}
+              compareVersion={compareVersion}
+              setCompareVersion={setCompareVersion}
+              getDocumentVersionColor={getDocumentVersionColor}
+            />
           )}
+
           {!(selectedVersion && compareVersion) && <VersionDetails selectedVersion={selectedVersion} />}
 
           {(selectedVersion && compareVersion) && (
@@ -193,5 +146,5 @@ export default function Procedura({ params }: { params: { proceduraId: string } 
         </div>
       </div>
     </div>
-  )
+  );
 }
