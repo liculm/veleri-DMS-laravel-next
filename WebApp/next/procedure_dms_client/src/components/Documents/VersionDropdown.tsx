@@ -51,14 +51,14 @@ const VersionDropdown: React.FC<VersionDropdownProps> =
         </Dropdown>
 
         {selectedVersion && (
-          <p>
+          <div>
             Trenutno odabrana bazna verzija <strong>{selectedVersion.version_number}</strong>
             {compareVersion && selectedVersion && (
               <div>
                 uspoređena sa verzijom <strong>{compareVersion.version_number}</strong>
               </div>
             )}
-          </p>
+          </div>
         )}
 
         <Dropdown

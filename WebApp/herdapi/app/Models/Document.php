@@ -10,18 +10,8 @@ class Document extends BaseModel
 {
     use HasFactory;
 
-    /**
-     * The table associated with the model.
-     *
-     * @var string
-     */
-    protected $table = 'document';
+    protected $table = 'documents';
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
      protected $fillable = [
         'name',
         'description',

@@ -23,20 +23,23 @@ class DocumentController extends Controller
         return response()->json($documents);
     }
 
-    public function requestedDocumentWithVersions($id): JsonResponse
+    public function requestedDocumentWithVersions(Request $request, $id): JsonResponse
     {
-        $document = Document::with(['versions' => function ($query) {
+        $userRoleId = $request->user()->role_id;
+
+        $document = Document::with(['versions' => function ($query) use ($userRoleId) {
             $query->orderByDesc('status_id');
+            if ($userRoleId !== 2) {
+                $query->where('status_id', 4);
+            }
         }])->find($id);
 
-        if ($document) {
-            return response()->json($document);
-        } else {
-            return response()->json(['error' => 'Document not found'], 404);
-        }
+        return $document
+            ? response()->json($document)
+            : response()->json(['error' => 'Document not found'], 404);
     }
 
-    public function store(Request $request): JsonResponse
+    public function addDocument(Request $request): JsonResponse
     {
         $user = $request->user();
 
@@ -90,7 +93,7 @@ class DocumentController extends Controller
         return response()->json($validatedData, 201);
     }
 
-    public function documentVersion($id): JsonResponse
+    public function getDocumentVersion($id): JsonResponse
     {
         $version = DocumentVersion::query()
             ->where('id', $id)

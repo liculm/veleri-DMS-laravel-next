@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Models;
 
 use App\Models\Base\BaseModel;
@@ -11,11 +10,6 @@ class DocumentVersion extends BaseModel
 {
     use HasFactory;
 
-    /**
-     * The table associated with the model.
-     *
-     * @var string
-     */
     protected $table = 'document_version';
 
     protected $fillable = [

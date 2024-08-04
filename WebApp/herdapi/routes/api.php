@@ -13,13 +13,12 @@ Route::middleware(['auth:sanctum'])->get('/documents/versions', [DocumentControl
 
 Route::middleware(['auth:sanctum'])->get('/documents', [DocumentController::class, 'allDocuments']);
 
-Route::middleware(['auth:sanctum'])->get('/documents/{id}/versions', [DocumentController::class, 'requestedDocumentWithVersions']);
-
-Route::middleware(['auth:sanctum'])->post('/documents', [DocumentController::class, 'store']);
-
-Route::middleware(['auth:sanctum'])->put('/documents', [DocumentController::class, 'updateDocument']);
-
-Route::middleware(['auth:sanctum'])->get('/documents/version/{id}', [DocumentController::class, 'documentVersion']);
+Route::middleware(['auth:sanctum'])->group(function () {
+    Route::get('/documents/{id}/versions', [DocumentController::class, 'requestedDocumentWithVersions']);
+    Route::post('/documents', [DocumentController::class, 'addDocument']);
+    Route::put('/documents', [DocumentController::class, 'updateDocument']);
+    Route::get('/documents/version/{id}', [DocumentController::class, 'getDocumentVersion']);
+});
 
 Route::middleware(['auth:sanctum'])->post('/documents/version/{id}', [DocumentController::class, 'addDocumentVersion']);
 

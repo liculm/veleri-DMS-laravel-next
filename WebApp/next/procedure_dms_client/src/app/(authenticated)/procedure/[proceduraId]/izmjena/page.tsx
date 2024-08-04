@@ -10,14 +10,16 @@ import DocumentDetails from '@/components/Documents/DocumentDetails'
 import { useRouter } from 'next/navigation'
 
 export default function IzmjenaDokumentaPage({ params }: { params: { proceduraId: string } }) {
-  const [documentWithVersions, setDocumentWithVersions] = useState<DocumentWithVersions | null>(null)
+  const [
+    documentWithVersions,
+    setDocumentWithVersions
+  ] = useState<DocumentWithVersions | null>(null)
 
   const isMounted = useRef(false);
   const router = useRouter()
 
   const fetchData = () => {
     if (!isMounted.current) {
-
       axios.get<DocumentWithVersions>(`api/documents/${params.proceduraId}/versions`)
         .then(({ data }) => {
           data.updated_at = new Date(data.updated_at).toDateString()

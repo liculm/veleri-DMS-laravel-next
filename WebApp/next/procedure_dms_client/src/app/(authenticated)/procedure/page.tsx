@@ -9,7 +9,7 @@ import { ErrorMessage, Field, Form, Formik } from 'formik'
 import * as Yup from 'yup'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEye, faPen, faRepeat } from '@fortawesome/free-solid-svg-icons'
-import { useAuth } from '@/hooks/auth';
+import { useAuth } from '@/hooks/auth'
 import { Roles } from '@/enums/roles'
 
 interface AddDocumentPayload {
@@ -23,7 +23,7 @@ interface AddDocumentPayload {
 }
 
 export default function ProcedurePage() {
-  const { user } = useAuth({});
+  const { user } = useAuth({})
 
   const [documents, setDocuments] = useState<Document[]>([])
   const [submitting, setSubmitting] = useState(false)
@@ -71,14 +71,14 @@ export default function ProcedurePage() {
     documentCode: Yup.string().required('Šifra procedure je obavezno polje.'),
     responsibleStaff: Yup.string().required('Odgovorne osobe su obavezno polje.'),
     timePeriod: Yup.string().required('Vremenska dinamika je obavezno polje.'),
-    interdependence: Yup.string().required('Međuovisnosti su obavezno polje.')
+    interdependence: Yup.string().required('Međuovisnosti su obavezno polje.'),
   })
 
   useEffect(fetchData, [])
 
   function dismount() {
-    isMounted.current = false;
-    fetchData();
+    isMounted.current = false
+    fetchData()
   }
 
   if (submitting) {
@@ -92,10 +92,12 @@ export default function ProcedurePage() {
       <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
         <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg">
           <div className="p-6 bg-white border-b border-gray-200">
-            <button className="float-right ml-4 rounded shadow-sm p-2 bg-green-200"
-                    onClick={() => (document.getElementById('document_form') as HTMLDialogElement)?.showModal()}>
-              Dodaj novu proceduru
-            </button>
+            {user?.role_id && user?.role_id === Roles.admin && (
+              <button className="float-right ml-4 rounded shadow-sm p-2 bg-green-200"
+                      onClick={() => (document.getElementById('document_form') as HTMLDialogElement)?.showModal()}>
+                Dodaj novu proceduru
+              </button>
+            )}
             <button
               onClick={dismount}
               className="float-right mb-4 bg-blue-300 p-2 rounded"
@@ -138,7 +140,7 @@ export default function ProcedurePage() {
                     )}
                   </td>
                 </tr>
-                ))}
+              ))}
               </tbody>
             </table>
             <dialog id="document_form"
@@ -155,7 +157,7 @@ export default function ProcedurePage() {
                   responsibleStaff: '',
                   timePeriod: '',
                   interdependence: '',
-              }}
+                }}
                 validationSchema={DocumentSchema}
                 onSubmit={handleSubmit}
               >

@@ -31,14 +31,12 @@ export default function Procedura({ params }: { params: { proceduraId: string } 
   };
 
   function checkDifferences(path: readonly string[]): string {
+    if (path.length === 0) return '';
+
     const selectedVersionDocumentData = lodash.get(selectedVersion?.document_data, path);
     const compareVersionDocumentData = lodash.get(compareVersion?.document_data, path);
 
-    const isEqual = lodash.isEqual(selectedVersionDocumentData, compareVersionDocumentData);
-
-    if (isEqual) return '';
-
-    return 'code-line-updated';
+    return lodash.isEqual(selectedVersionDocumentData, compareVersionDocumentData) ? '' : 'code-line-updated';
   }
 
   const fetchData = () => {
