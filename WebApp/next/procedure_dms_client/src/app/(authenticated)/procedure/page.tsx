@@ -51,13 +51,10 @@ export default function ProcedurePage() {
 
   const handleSubmit = async (values: AddDocumentPayload) => {
     setSubmitting(true)
-    await axios.post('api/documents', values).then(
-      (response) => {
-        console.log(response)
-      },
-    ).catch((error) => {
-      console.log(error)
-    })
+    await axios.post('api/documents', values)
+      .catch((error) => {
+        console.log(error)
+      })
 
     dismount()
 

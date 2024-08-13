@@ -8,6 +8,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faClone, faFile, faRepeat } from '@fortawesome/free-solid-svg-icons'
 import DocumentDetails from '@/components/Documents/DocumentDetails'
 import { useRouter } from 'next/navigation'
+import { DocumentVersionStatuses, getDocumentVersionStatus } from '@/objects/documentVersionStatuses'
 
 export default function IzmjenaDokumentaPage({ params }: { params: { proceduraId: string } }) {
   const [
@@ -94,6 +95,7 @@ export default function IzmjenaDokumentaPage({ params }: { params: { proceduraId
               <tr>
                 <th className="px-4 py-2">Verzija</th>
                 <th className="px-4 py-2">Akademska godina</th>
+                <th className="px-4 py-2">Status</th>
                 <th className="px-4 py-2">Posljednje ažurirao</th>
                 <th className="px-4 py-2">Posljednje ažurirano</th>
                 <th className="px-4 py-2">Akcije</th>
@@ -104,6 +106,7 @@ export default function IzmjenaDokumentaPage({ params }: { params: { proceduraId
                 <tr key={index}>
                   <td className="border px-4 py-2">{version.version_number}</td>
                   <td className="border px-4 py-2">{version.academic_year}</td>
+                  <td className={`border px-4 py-2 ${getDocumentVersionStatus(version.status_id).color}`}>{getDocumentVersionStatus(version.status_id).label}</td>
                   <td className="border px-4 py-2">{version.modified_by_name}</td>
                   <td className="border px-4 py-2">{formatDateHR(new Date(version.updated_at))}</td>
                   <td className="border py-2 items-center">

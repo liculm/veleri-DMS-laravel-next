@@ -136,7 +136,8 @@ class DocumentController extends Controller
     {
         // Get all documents with their versions that have a version with the requested status
         $documents = Document::with(['versions' => function ($query) use ($id) {
-            $query->where('status_id', $id);
+            $query->where('status_id', $id)
+                ->select('id', 'document_id', 'version_number', 'academic_year', 'approved_by_user_id', 'status_id', 'modified_by_id', 'modified_by_name', 'created_by_name', 'created_at');
         }])->get();
 
         // Filter out documents that don't have any versions with the requested status

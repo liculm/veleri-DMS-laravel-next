@@ -23,7 +23,6 @@ export default function UpravljanjeProceduramaPage() {
 
       axios.get(`/api/documents/withStatus/${currentStatusFilter}`)
         .then(response => {
-          console.log(response.data); // Log the response data to inspect its structure
           if (Array.isArray(response.data)) {
             setDocumentsWithVersions(response.data);
           } else {
@@ -106,10 +105,10 @@ export default function UpravljanjeProceduramaPage() {
                     <div key={version.id} className="flex justify-between items-center p-4 border-b border-gray-200">
                       <div>
                         <p><strong>Verzija: </strong> {version.version_number}</p>
-                          <p><strong>Akademska godina: </strong> {version.academic_year}</p>
-                          <p><strong>Kreirao: </strong> {version.created_by_name}</p>
-                          <p><strong>Kreirano datuma: </strong> {formatDateHR(new Date(version.created_at))}</p>
-                        </div>
+                        <p><strong>Akademska godina: </strong> {version.academic_year}</p>
+                        <p><strong>Kreirao: </strong> {version.created_by_name}</p>
+                        <p><strong>Kreirano datuma: </strong> {formatDateHR(new Date(version.created_at))}</p>
+                      </div>
 
                       <div className="dropdown dropdown-left cursor-pointer">
                         <label tabIndex={0} className="bg-gray-200 p-2 rounded cursor-pointer">Postavi status</label>

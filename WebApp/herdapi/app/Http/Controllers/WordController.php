@@ -6,7 +6,6 @@ use App\Models\Document;
 use App\Models\DocumentVersion;
 use PhpOffice\PhpWord\PhpWord;
 use PhpOffice\PhpWord\IOFactory;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use PhpOffice\PhpWord\SimpleType\JcTable;
 
@@ -146,18 +145,11 @@ class WordController extends Controller
             }
         }
 
-        $secondSection = $phpWord->addSection(array(
-            'marginTop' => 1000,
-            'marginBottom' => 2000,
-            'marginLeft' => 800,
-            'marginRight' => 800
-        ));
-
-        $madeByTable = $secondSection->addTable('StyledTable');
+        $madeByTable = $section->addTable('StyledTable');
 
         $madeByTable->addRow();
         $madeByTable->addCell(2000)->addText('IZRADIO/LA');
-        $madeByTable->addCell(4000)->addText($version->created_by_name);
+        $madeByTable->addCell(4000)->addText($version->modified_by_name);
         $madeByTable->addCell(3000)->addText('');
 
         $madeByTable->addRow();
@@ -172,14 +164,5 @@ class WordController extends Controller
 
         // Return the file as a download response
         return response()->download($tempFile, $document->name . '.docx')->deleteFileAfterSend();
-
-
-//        // Define the file name and path to save the document
-//        $fileName = 'Procedura_za_gostujuca_predavanja.docx';
-//        $filePath = "D:\\Dump\\" . $fileName; // Use an absolute path directly
-//
-//// Save the file locally
-//        $phpWord->save($filePath, 'Word2007');
-//        return response()->json(['message' => "Creating word file for proceduraId: $proceduraId and versionId: $versionId"]);
     }
 }

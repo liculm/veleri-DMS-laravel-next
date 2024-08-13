@@ -103,7 +103,7 @@ const DocumentDetails: React.FC<DocumentDetailsProps> = ({ documentWithVersions,
       </div>
 
       {(showEditButton) && (
-        <div className="tooltip tooltip-secondary" data-tip="Uredi">
+        <div className="tooltip" data-tip="Uredi">
           <button onClick={() => (document.getElementById('document_form') as HTMLDialogElement)?.showModal()}
                   className="py-2 px-4 bg-orange-200 p-1 rounded">
             <FontAwesomeIcon icon={faPen} />

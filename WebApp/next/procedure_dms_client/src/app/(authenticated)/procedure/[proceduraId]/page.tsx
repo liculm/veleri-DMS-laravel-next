@@ -10,6 +10,7 @@ import DocumentDetails from '@/components/Documents/DocumentDetails';
 import { croatianTranslations } from '@/translation/jsonEditorTranslation';
 import VersionDropdown from '@/components/Documents/VersionDropdown';
 import VersionDetails from '@/components/Documents/VersionDetails'
+import { DocumentVersionStatuses, getDocumentVersionStatus } from '@/objects/documentVersionStatuses'
 
 export default function Procedura({ params }: { params: { proceduraId: string } }) {
   const [document, setDocument] = useState<DocumentWithVersions | null>(null);
@@ -101,16 +102,7 @@ export default function Procedura({ params }: { params: { proceduraId: string } 
   }
 
   function getDocumentVersionColor(versionStatusId: number): string {
-    switch (versionStatusId) {
-      case 4:
-        return 'bg-green-100';
-      case 3:
-        return 'bg-yellow-100';
-      case 2:
-        return 'bg-red-100';
-      default:
-        return '';
-    }
+    return getDocumentVersionStatus(versionStatusId).color;
   }
 
   return (
