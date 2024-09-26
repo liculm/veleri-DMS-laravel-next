@@ -1,4 +1,4 @@
-# Laravel and Next.js Playground
+# Laravel and Next.js Veleri DMS app
 
 This repository contains a Laravel backend and a Next.js frontend. Follow the instructions below to set up the project.
 
