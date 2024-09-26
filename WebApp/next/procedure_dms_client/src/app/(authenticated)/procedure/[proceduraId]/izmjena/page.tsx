@@ -8,7 +8,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faClone, faFile, faRepeat } from '@fortawesome/free-solid-svg-icons'
 import DocumentDetails from '@/components/Documents/DocumentDetails'
 import { useRouter } from 'next/navigation'
-import { DocumentVersionStatuses, getDocumentVersionStatus } from '@/objects/documentVersionStatuses'
+import { getDocumentVersionStatus } from '@/objects/documentVersionStatuses'
 
 export default function IzmjenaDokumentaPage({ params }: { params: { proceduraId: string } }) {
   const [
@@ -60,7 +60,7 @@ export default function IzmjenaDokumentaPage({ params }: { params: { proceduraId
         document.body.appendChild(fileLink);
 
         fileLink.click();
-        fileLink.remove(); // Clean up
+        fileLink.remove();
 
         window.URL.revokeObjectURL(fileURL)
       })

@@ -1,10 +1,10 @@
 'use client'
 
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect } from 'react'
 import axios from '@/lib/axios'
 import { useRouter } from 'next/navigation'
 import { DocumentWithVersions } from '@/types/Document'
-import { formatDateHR, formatDateTimeHR } from '@/helpers/DateHelper'
+import { formatDateHR } from '@/helpers/DateHelper'
 import { DocumentVersionStatuses } from '@/enums/DocumentVersionStatuses'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEye } from '@fortawesome/free-solid-svg-icons'
@@ -26,7 +26,7 @@ export default function UpravljanjeProceduramaPage() {
           if (Array.isArray(response.data)) {
             setDocumentsWithVersions(response.data);
           } else {
-            setDocumentsWithVersions([]); // Ensure it's an array
+            setDocumentsWithVersions([]);
           }
           setHttpRequestInProgress(false);
         })
@@ -36,10 +36,6 @@ export default function UpravljanjeProceduramaPage() {
         });
     }
   }, [currentStatusFilter]);
-
-  const handleDocumentClick = (documentId: number) => {
-    router.push(`/procedure/${documentId}`)
-  }
 
   const statusFilters = [
     { name: 'Čekanje', colorClass: 'bg-gray-200', filterValue: DocumentVersionStatuses.waiting },
